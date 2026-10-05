@@ -22,3 +22,4 @@ int dequeue(Queue* queue);
 void freeQueue(Queue* queue);
 
 #endif
+
