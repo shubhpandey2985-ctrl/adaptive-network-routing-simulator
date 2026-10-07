@@ -16,6 +16,8 @@ private:
 public:
     Stack();
     ~Stack();
+    Stack(const Stack&) = delete;
+    Stack& operator=(const Stack&) = delete;
 
     bool isEmpty() const;
 
