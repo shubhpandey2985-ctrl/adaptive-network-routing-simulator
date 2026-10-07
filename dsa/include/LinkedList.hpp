@@ -17,6 +17,8 @@ private:
 public:
     LinkedList();
     ~LinkedList();
+    LinkedList(const LinkedList&) = delete;
+LinkedList& operator=(const LinkedList&) = delete;
 
     void insert(int router, int cost);
     void print() const;
