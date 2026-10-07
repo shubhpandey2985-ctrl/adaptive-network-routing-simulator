@@ -24,7 +24,7 @@ LinkedList& operator=(const LinkedList&) = delete;
     void print() const;
     void clear();
 
-    AdjNode* getHead() const;
+    const AdjNode* getHead() const;
 };
 
 #endif
