@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Learn | NETROUTE</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/learn.css">
+</head>
+
+<body class="learn-page">
+
+    <div class="page-container">
+
+        <header class="topbar">
+            <a href="index.html" class="brand">
+                <span class="brand-mark">⚡</span>
+
+                <span>
+                    <span class="brand-name">NETROUTE</span>
+                    <span class="brand-sub">NETWORK LAB</span>
+                </span>
+            </a>
+
+            <nav class="main-nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="#" class="nav-link">Network Lab</a>
+                <a href="#" class="nav-link">Modes</a>
+                <a href="learn.html" class="nav-link active">Learn</a>
+                <a href="#" class="nav-link">Quiz</a>
+            </nav>
+
+            <div class="top-actions">
+                <a href="#" class="nav-link utility-link">How to Play</a>
+                <a href="#" class="nav-link utility-link">Settings</a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">☰</button>
+            </div>
+        </header>
+
+        <main>
+
+            <!-- Hero -->
+            <section class="learn-hero">
+                <div class="hero-grid"></div>
+
+                <div class="hero-copy">
+                    <div class="eyebrow">
+                        <span class="eyebrow-dot"></span>
+                        NETWORK ACADEMY
+                    </div>
+
+                    <h1>
+                        UNDERSTAND THE
+                        <span>NETWORK.</span>
+                    </h1>
+
+                    <p>
+                        Don't memorize how routing works.
+                        Watch it happen, break it, and discover why packets choose their paths.
+                    </p>
+
+                    <div class="hero-actions">
+                        <a href="#network-basics" class="btn btn-primary">
+                            START LEARNING
+                        </a>
+
+                        <div class="hero-note">
+                            <span>07</span>
+                            INTERACTIVE MODULES
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-network">
+                    <svg viewBox="0 0 600 360" aria-label="Animated network">
+                        <defs>
+                            <filter id="heroGlow">
+                                <feGaussianBlur stdDeviation="4" result="blur"/>
+                                <feMerge>
+                                    <feMergeNode in="blur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+
+                        <line class="hero-link" x1="80" y1="180" x2="210" y2="80"/>
+                        <line class="hero-link" x1="80" y1="180" x2="210" y2="280"/>
+                        <line class="hero-link" x1="210" y1="80" x2="370" y2="130"/>
+                        <line class="hero-link" x1="210" y1="280" x2="370" y2="230"/>
+                        <line class="hero-link" x1="370" y1="130" x2="520" y2="180"/>
+                        <line class="hero-link" x1="370" y1="230" x2="520" y2="180"/>
+
+                        <circle class="hero-router" cx="80" cy="180" r="12"/>
+                        <circle class="hero-router" cx="210" cy="80" r="12"/>
+                        <circle class="hero-router" cx="210" cy="280" r="12"/>
+                        <circle class="hero-router" cx="370" cy="130" r="12"/>
+                        <circle class="hero-router" cx="370" cy="230" r="12"/>
+                        <circle class="hero-router destination" cx="520" cy="180" r="14"/>
+
+                        <circle class="hero-packet" cx="80" cy="180" r="6"/>
+
+                        <text x="62" y="220">R1</text>
+                        <text x="192" y="52">R2</text>
+                        <text x="192" y="315">R3</text>
+                        <text x="352" y="102">R4</text>
+                        <text x="352" y="265">R5</text>
+                        <text x="500" y="220">R6</text>
+                    </svg>
+                </div>
+
+                <div class="scroll-cue">
+                    <span></span>
+                    SCROLL TO EXPLORE
+                </div>
+            </section>
+
+            <!-- Progress -->
+            <section class="learning-progress">
+                <div>
+                    <span class="progress-label">YOUR LEARNING PATH</span>
+                    <strong id="progressText">01 / 07</strong>
+                </div>
+
+                <div class="progress-track">
+                    <span id="progressBar"></span>
+                </div>
+            </section>
+
+            <!-- Module 1 -->
+            <section class="learn-module" id="network-basics">
+
+                <div class="module-heading">
+                    <span class="module-number">01</span>
+
+                    <div>
+                        <span class="eyebrow">START HERE</span>
+                        <h2>Meet the Network</h2>
+                        <p>
+                            Before packets can travel, there must be something for them to travel through.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="network-learning-panel">
+
+                    <div class="network-stage" id="basicNetwork">
+
+                        <svg viewBox="0 0 800 430">
+                            <line class="network-edge" x1="120" y1="215" x2="300" y2="95"/>
+                            <line class="network-edge" x1="120" y1="215" x2="300" y2="335"/>
+                            <line class="network-edge" x1="300" y1="95" x2="500" y2="145"/>
+                            <line class="network-edge" x1="300" y1="335" x2="500" y2="285"/>
+                            <line class="network-edge" x1="500" y1="145" x2="690" y2="215"/>
+                            <line class="network-edge" x1="500" y1="285" x2="690" y2="215"/>
+
+                            <circle class="network-node" data-concept="router" cx="120" cy="215" r="18"/>
+                            <circle class="network-node" data-concept="router" cx="300" cy="95" r="18"/>
+                            <circle class="network-node" data-concept="router" cx="300" cy="335" r="18"/>
+                            <circle class="network-node" data-concept="router" cx="500" cy="145" r="18"/>
+                            <circle class="network-node" data-concept="router" cx="500" cy="285" r="18"/>
+                            <circle class="network-node destination-node" data-concept="destination" cx="690" cy="215" r="20"/>
+
+                            <text x="105" y="260">R1</text>
+                            <text x="285" y="60">R2</text>
+                            <text x="285" y="380">R3</text>
+                            <text x="485" y="110">R4</text>
+                            <text x="485" y="330">R5</text>
+                            <text x="670" y="260">R6</text>
+                        </svg>
+
+                        <button class="network-hotspot hotspot-router" data-concept="router">
+                            <span>ROUTER</span>
+                        </button>
+
+                        <button class="network-hotspot hotspot-link" data-concept="link">
+                            <span>LINK</span>
+                        </button>
+
+                        <button class="network-hotspot hotspot-packet" data-concept="packet">
+                            <span>PACKET</span>
+                        </button>
+
+                    </div>
+
+                    <div class="concept-panel" id="conceptPanel">
+                        <span class="concept-kicker">CLICK SOMETHING</span>
+                        <h3>Explore the network</h3>
+                        <p>
+                            Click a router, link, or packet to discover what each part does.
+                        </p>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Module 2 -->
+            <section class="learn-module dark-module">
+
+                <div class="module-heading">
+                    <span class="module-number">02</span>
+
+                    <div>
+                        <span class="eyebrow">PACKET JOURNEY</span>
+                        <h2>Follow the Packet</h2>
+                        <p>
+                            A packet doesn't magically appear at its destination. It moves hop by hop.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="packet-panel">
+
+                    <div class="packet-network">
+                        <svg viewBox="0 0 800 300">
+
+                            <line class="packet-edge" x1="90" y1="150" x2="270" y2="80"/>
+                            <line class="packet-edge" x1="270" y1="80" x2="480" y2="150"/>
+                            <line class="packet-edge" x1="480" y1="150" x2="700" y2="150"/>
+
+                            <circle class="packet-router" cx="90" cy="150" r="17"/>
+                            <circle class="packet-router" cx="270" cy="80" r="17"/>
+                            <circle class="packet-router" cx="480" cy="150" r="17"/>
+                            <circle class="packet-router destination-node" cx="700" cy="150" r="19"/>
+
+                            <text x="72" y="195">R1</text>
+                            <text x="252" y="48">R2</text>
+                            <text x="462" y="195">R3</text>
+                            <text x="680" y="195">R6</text>
+
+                            <circle id="learningPacket" class="learning-packet" cx="90" cy="150" r="8"/>
+                        </svg>
+                    </div>
+
+                    <div class="packet-info">
+                        <div class="packet-status">
+                            <span class="status-dot"></span>
+                            <span id="packetStatus">READY TO TRANSMIT</span>
+                        </div>
+
+                        <h3 id="packetTitle">I'm a packet.</h3>
+
+                        <p id="packetDescription">
+                            I need to travel from R1 to R6. Let's see how many hops it takes.
+                        </p>
+
+                        <button class="btn btn-primary" id="playPacket">
+                            ▶ PLAY JOURNEY
+                        </button>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Module 3 -->
+            <section class="learn-module">
+
+                <div class="module-heading">
+                    <span class="module-number">03</span>
+
+                    <div>
+                        <span class="eyebrow">ROUTING</span>
+                        <h2>One Destination. Multiple Paths.</h2>
+                        <p>
+                            A network can offer more than one way to reach the same destination.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="path-lab">
+
+                    <div class="path-network">
+                        <svg viewBox="0 0 800 360">
+
+                            <line class="path-edge" x1="100" y1="180" x2="280" y2="90"/>
+                            <line class="path-edge" x1="280" y1="90" x2="520" y2="90"/>
+                            <line class="path-edge" x1="520" y1="90" x2="700" y2="180"/>
+
+                            <line class="path-edge alternate" x1="100" y1="180" x2="280" y2="270"/>
+                            <line class="path-edge alternate" x1="280" y1="270" x2="520" y2="270"/>
+                            <line class="path-edge alternate" x1="520" y1="270" x2="700" y2="180"/>
+
+                            <circle class="path-node" cx="100" cy="180" r="18"/>
+                            <circle class="path-node" cx="280" cy="90" r="18"/>
+                            <circle class="path-node" cx="280" cy="270" r="18"/>
+                            <circle class="path-node" cx="520" cy="90" r="18"/>
+                            <circle class="path-node" cx="520" cy="270" r="18"/>
+                            <circle class="path-node destination-node" cx="700" cy="180" r="20"/>
+
+                            <text x="82" y="225">R1</text>
+                            <text x="262" y="60">R2</text>
+                            <text x="262" y="315">R3</text>
+                            <text x="502" y="60">R4</text>
+                            <text x="502" y="315">R5</text>
+                            <text x="680" y="225">R6</text>
+
+                            <text class="cost-label" x="190" y="118">2</text>
+                            <text class="cost-label" x="400" y="72">2</text>
+                            <text class="cost-label" x="605" y="118">1</text>
+
+                            <text class="cost-label" x="190" y="255">3</text>
+                            <text class="cost-label" x="400" y="290">1</text>
+                            <text class="cost-label" x="605" y="255">1</text>
+                        </svg>
+                    </div>
+
+                    <div class="path-options">
+
+                        <button class="path-option active" data-path="top">
+                            <span class="path-name">PATH A</span>
+                            <strong>R1 → R2 → R4 → R6</strong>
+                            <span class="path-cost">TOTAL COST <b>5</b></span>
+                        </button>
+
+                        <button class="path-option" data-path="bottom">
+                            <span class="path-name">PATH B</span>
+                            <strong>R1 → R3 → R5 → R6</strong>
+                            <span class="path-cost">TOTAL COST <b>5</b></span>
+                        </button>
+
+                    </div>
+
+                    <div class="path-message" id="pathMessage">
+                        Both routes currently have the same total cost.
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Module 4 -->
+            <section class="learn-module dark-module">
+
+                <div class="module-heading">
+                    <span class="module-number">04</span>
+
+                    <div>
+                        <span class="eyebrow">BREAK IT</span>
+                        <h2>What If a Router Fails?</h2>
+                        <p>
+                            Networks can change while packets are moving. That's where recovery matters.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="failure-lab">
+
+                    <div class="failure-network">
+
+                        <svg viewBox="0 0 800 380">
+
+                            <line class="failure-edge" x1="100" y1="190" x2="290" y2="90"/>
+                            <line class="failure-edge" x1="100" y1="190" x2="290" y2="290"/>
+                            <line class="failure-edge" x1="290" y1="90" x2="500" y2="190"/>
+                            <line class="failure-edge" x1="290" y1="290" x2="500" y2="190"/>
+                            <line class="failure-edge" x1="500" y1="190" x2="700" y2="190"/>
+
+                            <circle class="failure-node" id="failureR1" cx="100" cy="190" r="18"/>
+                            <circle class="failure-node" id="failureR2" cx="290" cy="90" r="18"/>
+                            <circle class="failure-node" id="failureR3" cx="290" cy="290" r="18"/>
+                            <circle class="failure-node" id="failureR4" cx="500" cy="190" r="18"/>
+                            <circle class="failure-node destination-node" cx="700" cy="190" r="20"/>
+
+                            <text x="82" y="235">R1</text>
+                            <text x="272" y="60">R2</text>
+                            <text x="272" y="335">R3</text>
+                            <text x="482" y="235">R4</text>
+                            <text x="680" y="235">R6</text>
+
+                            <circle id="failurePacket" class="failure-packet" cx="100" cy="190" r="7"/>
+                        </svg>
+
+                    </div>
+
+                    <div class="failure-controls">
+
+                        <div class="failure-state" id="failureState">
+                            <span class="status-dot"></span>
+                            NETWORK HEALTHY
+                        </div>
+
+                        <h3 id="failureTitle">Everything looks fine.</h3>
+
+                        <p id="failureDescription">
+                            The packet has a working route to its destination.
+                        </p>
+
+                        <button class="btn btn-danger" id="failRouter">
+                            ⚠ FAIL R2
+                        </button>
+
+                        <button class="btn btn-secondary" id="resetFailure">
+                            RESET NETWORK
+                        </button>
+
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Module 5 -->
+            <section class="learn-module">
+
+                <div class="module-heading">
+                    <span class="module-number">05</span>
+
+                    <div>
+                        <span class="eyebrow">PATH COST</span>
+                        <h2>Not Every Route Is Equal</h2>
+                        <p>
+                            Routing decisions can consider the cost associated with links.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="cost-card">
+
+                    <div class="cost-visual">
+                        <div class="cost-route">
+                            <span>R1</span>
+                            <i>2</i>
+                            <span>R2</span>
+                            <i>2</i>
+                            <span>R6</span>
+                        </div>
+
+                        <div class="cost-equation">
+                            2 + 2 = <strong>4</strong>
+                        </div>
+                    </div>
+
+                    <div class="cost-explanation">
+                        <span class="eyebrow">THE IDEA</span>
+
+                        <h3>
+                            Lower total cost can make a route more attractive.
+                        </h3>
+
+                        <p>
+                            A routing algorithm can compare possible paths by adding their link costs.
+                            The route with the lower total cost can be selected when the algorithm is designed to minimize cost.
+                        </p>
+
+                        <div class="cost-rule">
+                            <span>LINK COST</span>
+                            <strong>+</strong>
+                            <span>LINK COST</span>
+                            <strong>=</strong>
+                            <span>TOTAL PATH COST</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Module 6 -->
+            <section class="learn-module dark-module">
+
+                <div class="module-heading">
+                    <span class="module-number">06</span>
+
+                    <div>
+                        <span class="eyebrow">ALGORITHM</span>
+                        <h2>Meet Dijkstra</h2>
+                        <p>
+                            One way to understand minimum-cost routing is to follow Dijkstra's shortest-path process.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="dijkstra-lab">
+
+                    <div class="dijkstra-network">
+
+                        <svg viewBox="0 0 800 390">
+
+                            <line class="d-edge" x1="100" y1="195" x2="280" y2="90"/>
+                            <line class="d-edge" x1="100" y1="195" x2="280" y2="300"/>
+                            <line class="d-edge" x1="280" y1="90" x2="500" y2="145"/>
+                            <line class="d-edge" x1="280" y1="300" x2="500" y2="245"/>
+                            <line class="d-edge" x1="500" y1="145" x2="700" y2="195"/>
+                            <line class="d-edge" x1="500" y1="245" x2="700" y2="195"/>
+
+                            <circle class="d-node start" cx="100" cy="195" r="20"/>
+                            <circle class="d-node" cx="280" cy="90" r="20"/>
+                            <circle class="d-node" cx="280" cy="300" r="20"/>
+                            <circle class="d-node" cx="500" cy="145" r="20"/>
+                            <circle class="d-node" cx="500" cy="245" r="20"/>
+                            <circle class="d-node destination-node" cx="700" cy="195" r="22"/>
+
+                            <text x="82" y="240">R1</text>
+                            <text x="262" y="55">R2</text>
+                            <text x="262" y="345">R3</text>
+                            <text x="482" y="110">R4</text>
+                            <text x="482" y="290">R5</text>
+                            <text x="680" y="240">R6</text>
+
+                        </svg>
+
+                    </div>
+
+                    <div class="algorithm-steps">
+
+                        <div class="algorithm-step active" data-step="0">
+                            <span>01</span>
+                            <div>
+                                <strong>Start at the source</strong>
+                                <p>Begin with R1 and assign it a distance of 0.</p>
+                            </div>
+                        </div>
+
+                        <div class="algorithm-step" data-step="1">
+                            <span>02</span>
+                            <div>
+                                <strong>Check neighbouring routers</strong>
+                                <p>Look at the available links and their costs.</p>
+                            </div>
+                        </div>
+
+                        <div class="algorithm-step" data-step="2">
+                            <span>03</span>
+                            <div>
+                                <strong>Choose the lowest known cost</strong>
+                                <p>Select the next router with the smallest tentative distance.</p>
+                            </div>
+                        </div>
+
+                        <div class="algorithm-step" data-step="3">
+                            <span>04</span>
+                            <div>
+                                <strong>Repeat</strong>
+                                <p>Continue until the destination's shortest distance is determined.</p>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary" id="nextDijkstra">
+                            NEXT STEP →
+                        </button>
+
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Module 7 -->
+            <section class="learn-module">
+
+                <div class="module-heading">
+                    <span class="module-number">07</span>
+
+                    <div>
+                        <span class="eyebrow">THE BIG PICTURE</span>
+                        <h2>From Routing to Recovery</h2>
+                        <p>
+                            NETROUTE combines routing with changing network conditions.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="recovery-flow">
+
+                    <div class="flow-card">
+                        <span>01</span>
+                        <strong>NETWORK</strong>
+                        <p>Routers and links form a topology.</p>
+                    </div>
+
+                    <div class="flow-arrow">→</div>
+
+                    <div class="flow-card">
+                        <span>02</span>
+                        <strong>ROUTE</strong>
+                        <p>A path is selected toward the destination.</p>
+                    </div>
+
+                    <div class="flow-arrow">→</div>
+
+                    <div class="flow-card danger-flow">
+                        <span>03</span>
+                        <strong>FAILURE</strong>
+                        <p>A router or link becomes unavailable.</p>
+                    </div>
+
+                    <div class="flow-arrow">→</div>
+
+                    <div class="flow-card success-flow">
+                        <span>04</span>
+                        <strong>RECOVERY</strong>
+                        <p>An alternate route can restore communication.</p>
+                    </div>
+
+                </div>
+
+                <div class="learn-finale">
+                    <div>
+                        <span class="eyebrow">YOU'RE READY</span>
+                        <h2>Now build the network yourself.</h2>
+                        <p>
+                            You've seen the pieces. The Lab will let you experiment with them.
+                        </p>
+                    </div>
+
+                    <a href="#" class="btn btn-primary">ENTER NETWORK LAB →</a>
+                </div>
+
+            </section>
+
+        </main>
+
+        <footer class="learn-footer">
+            <div>
+                <strong>NETROUTE</strong>
+                <span>Adaptive Network Routing & Failure Recovery</span>
+            </div>
+
+            <span>NETWORK ACADEMY / LEARN</span>
+        </footer>
+
+    </div>
+
+    <script src="js/learn.js"></script>
+</body>
+</html>
