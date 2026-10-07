@@ -1,0 +1,515 @@
+/* Global variables */
+:root {
+    --bg: #070a12;
+    --bg-deep: #05070d;
+
+    --panel: #0d1220;
+    --panel-2: #11182a;
+
+    --line: #202a3f;
+    --line-light: rgba(255, 255, 255, 0.08);
+
+    --text: #f5f7ff;
+    --muted: #8490a8;
+    --muted-light: #a5aec0;
+
+    --cyan: #52e6ff;
+    --green: #65f6a1;
+    --pink: #ff5c9a;
+    --orange: #ffb454;
+    --danger: #ff5964;
+
+    --cyan-glow: rgba(82, 230, 255, 0.25);
+    --green-glow: rgba(101, 246, 161, 0.22);
+    --danger-glow: rgba(255, 89, 100, 0.22);
+
+    --content-width: 1380px;
+    --page-padding: 5vw;
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+}
+
+
+/* Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Base page */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+
+    background:
+        radial-gradient(
+            circle at 75% 0%,
+            #14233d 0,
+            var(--bg) 42%,
+            var(--bg-deep) 100%
+        );
+
+    color: var(--text);
+    font-family: "Space Grotesk", sans-serif;
+}
+
+
+/* Background grid */
+body::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    background-image:
+        linear-gradient(
+            rgba(255, 255, 255, 0.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.025) 1px,
+            transparent 1px
+        );
+
+    background-size: 42px 42px;
+
+    z-index: -1;
+}
+
+
+/* Text selection */
+::selection {
+    background: rgba(82, 230, 255, 0.25);
+    color: white;
+}
+
+
+/* Links */
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+/* Form elements */
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+button {
+    border: 0;
+}
+
+
+/* Main content width */
+.page-container {
+    width: min(var(--content-width), 90vw);
+    margin: 0 auto;
+}
+
+
+/* Navbar */
+.topbar {
+    width: 100%;
+    height: 78px;
+
+    padding: 0 var(--page-padding);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    background: rgba(7, 10, 18, 0.78);
+
+    border-bottom: 1px solid var(--line-light);
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+
+/* Brand */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    flex-shrink: 0;
+}
+
+.brand-mark {
+    width: 40px;
+    height: 40px;
+
+    display: grid;
+    place-items: center;
+
+    border: 1px solid rgba(82, 230, 255, 0.5);
+    border-radius: var(--radius-md);
+
+    background: rgba(82, 230, 255, 0.08);
+
+    color: var(--cyan);
+
+    box-shadow:
+        0 0 25px rgba(82, 230, 255, 0.12);
+}
+
+.brand-name {
+    font:
+        800 18px "Orbitron", sans-serif;
+
+    letter-spacing: 1.5px;
+}
+
+.brand-sub {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--cyan);
+}
+
+
+/* Navigation */
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-link {
+    position: relative;
+
+    padding: 9px 12px;
+
+    border-radius: var(--radius-sm);
+
+    color: var(--muted);
+
+    font-size: 12px;
+    font-weight: 600;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease;
+}
+
+.nav-link:hover {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.nav-link.active {
+    color: var(--cyan);
+    background: rgba(82, 230, 255, 0.07);
+}
+
+.nav-link.active::after {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    bottom: 3px;
+
+    width: 4px;
+    height: 4px;
+
+    border-radius: 50%;
+
+    background: var(--cyan);
+
+    box-shadow: 0 0 8px var(--cyan);
+
+    transform: translateX(-50%);
+}
+
+
+/* Top-right actions */
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+/* Small icon buttons */
+.icon-btn {
+    width: 36px;
+    height: 36px;
+
+    display: grid;
+    place-items: center;
+
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+
+    background: var(--panel);
+    color: var(--cyan);
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.icon-btn:hover {
+    border-color: rgba(82, 230, 255, 0.45);
+    background: rgba(82, 230, 255, 0.07);
+    transform: translateY(-1px);
+}
+
+
+/* Common buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 11px 16px;
+
+    border-radius: var(--radius-sm);
+
+    cursor: pointer;
+
+    font:
+        700 10px "Orbitron", sans-serif;
+
+    letter-spacing: 0.7px;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+
+/* Main button */
+.btn-primary {
+    border: 1px solid var(--cyan);
+    background: var(--cyan);
+    color: #061017;
+
+    box-shadow:
+        0 0 20px rgba(82, 230, 255, 0.12);
+}
+
+.btn-primary:hover {
+    box-shadow:
+        0 0 28px rgba(82, 230, 255, 0.25);
+}
+
+
+/* Secondary button */
+.btn-secondary {
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--text);
+}
+
+.btn-secondary:hover {
+    border-color: #334766;
+}
+
+
+/* Danger button */
+.btn-danger {
+    border: 1px solid rgba(255, 89, 100, 0.5);
+    background: rgba(255, 89, 100, 0.08);
+    color: #ff8690;
+}
+
+
+/* Common text styles */
+.font-display {
+    font-family: "Orbitron", sans-serif;
+}
+
+.text-cyan {
+    color: var(--cyan);
+}
+
+.text-green {
+    color: var(--green);
+}
+
+.text-danger {
+    color: var(--danger);
+}
+
+.text-muted {
+    color: var(--muted);
+}
+
+
+/* Small section labels */
+.eyebrow {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--cyan);
+    font-weight: 700;
+}
+
+
+/* Generic panel */
+.panel {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(16, 23, 39, 0.95),
+            rgba(9, 13, 23, 0.95)
+        );
+
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+}
+
+
+/* Status indicator */
+.status {
+    font-size: 9px;
+    color: var(--green);
+    letter-spacing: 1.3px;
+}
+
+.status-dot {
+    display: inline-block;
+
+    width: 6px;
+    height: 6px;
+
+    margin-right: 7px;
+
+    border-radius: 50%;
+
+    background: var(--green);
+
+    box-shadow:
+        0 0 10px var(--green);
+}
+
+
+/* Toast notification */
+.toast {
+    position: fixed;
+
+    bottom: 25px;
+    left: 50%;
+
+    padding: 11px 15px;
+
+    border: 1px solid #29405d;
+    border-radius: var(--radius-sm);
+
+    background: #101a2b;
+
+    font-size: 12px;
+
+    opacity: 0;
+    pointer-events: none;
+
+    transform: translate(-50%, 20px);
+
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+
+    z-index: 1000;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+
+/* Mobile menu button */
+.mobile-menu-btn {
+    display: none;
+}
+
+
+/* Keyboard focus */
+:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
+}
+
+
+/* Reduce animations when requested by the user */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+
+/* Tablet */
+@media (max-width: 1000px) {
+    .main-nav {
+        gap: 2px;
+    }
+
+    .nav-link {
+        padding: 8px;
+        font-size: 11px;
+    }
+}
+
+
+/* Mobile */
+@media (max-width: 700px) {
+    .topbar {
+        height: 68px;
+        padding: 0 20px;
+    }
+
+    .brand-sub {
+        display: none;
+    }
+
+    .main-nav {
+        display: none;
+    }
+
+    .mobile-menu-btn {
+        display: grid;
+        place-items: center;
+    }
+
+    .page-container {
+        width: 92vw;
+    }
+}
