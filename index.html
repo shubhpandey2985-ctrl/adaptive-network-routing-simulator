@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="NETROUTE — an interactive network routing and failure recovery laboratory."
+    >
+
+    <title>NETROUTE — Network Lab</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/home.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <header class="topbar">
+
+        <a href="index.html" class="brand" aria-label="NETROUTE Home">
+
+            <div class="brand-mark">
+                ⚡
+            </div>
+
+            <div>
+                <div class="brand-name">NETROUTE</div>
+                <div class="brand-sub">NETWORK LAB</div>
+            </div>
+
+        </a>
+
+        <nav class="main-nav" aria-label="Main navigation">
+
+            <a href="index.html" class="nav-link active">
+                Home
+            </a>
+
+            <a href="lab.html" class="nav-link">
+                Network Lab
+            </a>
+
+            <a href="modes.html" class="nav-link">
+                Modes
+            </a>
+
+            <a href="learn.html" class="nav-link">
+                Learn
+            </a>
+
+            <a href="quiz.html" class="nav-link">
+                Quiz
+            </a>
+
+        </nav>
+
+        <div class="top-actions">
+
+            <a href="how-to-play.html" class="btn btn-secondary">
+                How to Play
+            </a>
+
+            <a
+                href="settings.html"
+                class="icon-btn"
+                aria-label="Settings"
+                title="Settings"
+            >
+                ⚙
+            </a>
+
+            <button
+                class="icon-btn mobile-menu-btn"
+                id="mobileMenuBtn"
+                aria-label="Open navigation"
+                aria-expanded="false"
+                type="button"
+            >
+                ☰
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <!-- Hero -->
+        <section class="home-hero">
+
+            <div class="page-container">
+
+                <div class="hero-content">
+
+                    <div class="eyebrow">
+                        INTERACTIVE NETWORK LAB
+                    </div>
+
+                    <h1>
+                        KEEP THE
+                        <span>PACKET</span>
+                        ALIVE.
+                    </h1>
+
+                    <p class="hero-description">
+                        Learn how computer networks actually react when
+                        routers fail, links break, and traffic needs a new path.
+                    </p>
+
+                    <div class="hero-actions">
+
+                        <a href="lab.html" class="btn btn-primary">
+                            ▶ START LAB
+                        </a>
+
+                        <a href="learn.html" class="btn btn-secondary">
+                            LEARN FIRST
+                        </a>
+
+                    </div>
+
+                    <div class="hero-status">
+
+                        <span class="status">
+                            <span class="status-dot"></span>
+                            SIMULATION ONLINE
+                        </span>
+
+                        <span class="text-muted">
+                            Routing · DSA · OOP
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Live network preview -->
+                <div class="hero-network panel">
+
+                    <div class="network-preview-grid">
+
+                        <svg
+                            class="preview-links"
+                            viewBox="0 0 800 470"
+                            preserveAspectRatio="none"
+                            aria-hidden="true"
+                        >
+
+                            <line
+                                class="preview-link link-r1-r2"
+                                x1="110"
+                                y1="230"
+                                x2="280"
+                                y2="115"
+                            />
+
+                            <line
+                                class="preview-link link-r2-r3"
+                                x1="280"
+                                y1="115"
+                                x2="500"
+                                y2="150"
+                            />
+
+                            <line
+                                class="preview-link link-r1-r4"
+                                x1="110"
+                                y1="230"
+                                x2="285"
+                                y2="355"
+                            />
+
+                            <line
+                                class="preview-link link-r4-r5"
+                                x1="285"
+                                y1="355"
+                                x2="505"
+                                y2="330"
+                            />
+
+                            <line
+                                class="preview-link link-r5-r3"
+                                x1="505"
+                                y1="330"
+                                x2="500"
+                                y2="150"
+                            />
+
+                            <line
+                                class="preview-link link-r3-r6"
+                                x1="500"
+                                y1="150"
+                                x2="695"
+                                y2="240"
+                            />
+
+                            <line
+                                class="preview-link link-r5-r6"
+                                x1="505"
+                                y1="330"
+                                x2="695"
+                                y2="240"
+                            />
+
+                            <circle
+                                class="preview-packet"
+                                id="previewPacket"
+                                cx="110"
+                                cy="230"
+                                r="6"
+                            />
+
+                        </svg>
+
+
+                        <div class="preview-router router-one">
+                            R1
+                        </div>
+
+                        <div class="preview-router router-two">
+                            R2
+                        </div>
+
+                        <div class="preview-router router-three">
+                            R3
+                        </div>
+
+                        <div class="preview-router router-four">
+                            R4
+                        </div>
+
+                        <div class="preview-router router-five">
+                            R5
+                        </div>
+
+                        <div class="preview-router router-six">
+                            R6
+                        </div>
+
+
+                        <div class="preview-label">
+                            LIVE NETWORK
+                        </div>
+
+
+                        <div class="network-event" id="networkEvent">
+                            NORMAL ROUTE
+                        </div>
+
+
+                        <div class="network-route" id="networkRoute">
+                            R1 → R2 → R3 → R6
+                        </div>
+
+
+                        <div class="network-message" id="networkMessage">
+                            PACKET DELIVERED
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Introduction -->
+        <section class="intro-section">
+
+            <div class="page-container">
+
+                <div class="section-heading">
+
+                    <div class="eyebrow">
+                        WHY NETROUTE?
+                    </div>
+
+                    <h2>
+                        Don't just study routing.
+                        <span>Break it.</span>
+                    </h2>
+
+                    <p>
+                        NETROUTE turns networking concepts into an interactive
+                        simulation where you can see what happens to packets
+                        when the network changes.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-grid">
+
+                    <article class="feature-card panel">
+
+                        <div class="feature-icon">
+                            ◈
+                        </div>
+
+                        <span class="eyebrow">01</span>
+
+                        <h3>
+                            Build a Network
+                        </h3>
+
+                        <p>
+                            Explore routers, links, paths and network
+                            connections through an interactive topology.
+                        </p>
+
+                    </article>
+
+
+                    <article class="feature-card panel">
+
+                        <div class="feature-icon">
+                            ⚡
+                        </div>
+
+                        <span class="eyebrow">02</span>
+
+                        <h3>
+                            Break the Network
+                        </h3>
+
+                        <p>
+                            Fail routers or links and observe how the network
+                            responds to changing conditions.
+                        </p>
+
+                    </article>
+
+
+                    <article class="feature-card panel">
+
+                        <div class="feature-icon">
+                            ↗
+                        </div>
+
+                        <span class="eyebrow">03</span>
+
+                        <h3>
+                            Watch Rerouting
+                        </h3>
+
+                        <p>
+                            Follow the packet as it finds another available
+                            route to reach its destination.
+                        </p>
+
+                    </article>
+
+
+                    <article class="feature-card panel">
+
+                        <div class="feature-icon">
+                            🧠
+                        </div>
+
+                        <span class="eyebrow">04</span>
+
+                        <h3>
+                            Understand Why
+                        </h3>
+
+                        <p>
+                            Connect the simulation to routing algorithms,
+                            graph theory, DSA and networking concepts.
+                        </p>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Core loop -->
+        <section class="steps-section">
+
+            <div class="page-container">
+
+                <div class="section-heading">
+
+                    <div class="eyebrow">
+                        THE CORE LOOP
+                    </div>
+
+                    <h2>
+                        Send. Break. <span>Adapt.</span>
+                    </h2>
+
+                </div>
+
+
+                <div class="steps-grid">
+
+                    <div class="step">
+
+                        <div class="step-number">
+                            01
+                        </div>
+
+                        <div>
+                            <h3>Send a Packet</h3>
+
+                            <p>
+                                Choose a source and destination and start
+                                the packet journey.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="step">
+
+                        <div class="step-number">
+                            02
+                        </div>
+
+                        <div>
+                            <h3>Create Failure</h3>
+
+                            <p>
+                                Take a router or connection offline and
+                                change the network topology.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="step">
+
+                        <div class="step-number">
+                            03
+                        </div>
+
+                        <div>
+                            <h3>Find a New Path</h3>
+
+                            <p>
+                                Watch the routing logic search for another
+                                route through the network.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="step">
+
+                        <div class="step-number">
+                            04
+                        </div>
+
+                        <div>
+                            <h3>Learn the Concept</h3>
+
+                            <p>
+                                Understand the algorithm and networking
+                                principle behind the decision.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Modes -->
+        <section class="modes-preview">
+
+            <div class="page-container">
+
+                <div class="section-heading split-heading">
+
+                    <div>
+
+                        <div class="eyebrow">
+                            CHOOSE YOUR CHAOS
+                        </div>
+
+                        <h2>
+                            Different networks.
+                            <span>Different problems.</span>
+                        </h2>
+
+                    </div>
+
+                    <a href="modes.html" class="btn btn-secondary">
+                        VIEW ALL MODES
+                    </a>
+
+                </div>
+
+
+                <div class="mode-preview-grid">
+
+                    <a href="modes.html" class="mode-preview-card panel">
+
+                        <span class="mode-preview-icon">
+                            🌐
+                        </span>
+
+                        <div>
+                            <h3>Calm Network</h3>
+
+                            <p>
+                                Start with the fundamentals.
+                            </p>
+                        </div>
+
+                        <span class="mode-preview-status">
+                            LIVE
+                        </span>
+
+                    </a>
+
+
+                    <a href="modes.html" class="mode-preview-card panel">
+
+                        <span class="mode-preview-icon">
+                            🚦
+                        </span>
+
+                        <div>
+                            <h3>Congestion</h3>
+
+                            <p>
+                                Deal with heavy network traffic.
+                            </p>
+                        </div>
+
+                        <span class="mode-preview-status locked">
+                            SOON
+                        </span>
+
+                    </a>
+
+
+                    <a href="modes.html" class="mode-preview-card panel">
+
+                        <span class="mode-preview-icon">
+                            💥
+                        </span>
+
+                        <div>
+                            <h3>Disaster Mode</h3>
+
+                            <p>
+                                Multiple failures. One network.
+                            </p>
+                        </div>
+
+                        <span class="mode-preview-status locked">
+                            SOON
+                        </span>
+
+                    </a>
+
+
+                    <a href="modes.html" class="mode-preview-card panel">
+
+                        <span class="mode-preview-icon">
+                            🏁
+                        </span>
+
+                        <div>
+                            <h3>Algorithm Race</h3>
+
+                            <p>
+                                Compare routing strategies.
+                            </p>
+                        </div>
+
+                        <span class="mode-preview-status locked">
+                            SOON
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Call to action -->
+        <section class="home-cta">
+
+            <div class="page-container">
+
+                <div class="cta-panel panel">
+
+                    <div>
+
+                        <div class="eyebrow">
+                            READY?
+                        </div>
+
+                        <h2>
+                            Your first packet
+                            is waiting.
+                        </h2>
+
+                        <p>
+                            Enter the lab and see routing happen in real time.
+                        </p>
+
+                    </div>
+
+                    <a href="lab.html" class="btn btn-primary">
+                        ▶ ENTER NETWORK LAB
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="site-footer">
+
+        <div class="page-container">
+
+            <div class="footer-content">
+
+                <div class="brand">
+
+                    <div class="brand-mark">
+                        ⚡
+                    </div>
+
+                    <div>
+                        <div class="brand-name">NETROUTE</div>
+                        <div class="brand-sub">NETWORK LAB</div>
+                    </div>
+
+                </div>
+
+                <p>
+                    Learn networking by breaking it.
+                </p>
+
+                <span>
+                    © 2026 NETROUTE
+                </span>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <script src="js/index.js"></script>
+
+</body>
+
+</html>
