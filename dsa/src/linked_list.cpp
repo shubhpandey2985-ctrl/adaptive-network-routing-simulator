@@ -1,24 +1,44 @@
-#include <stdlib.h>
-#include "../include/linked_list.h"
+#include <iostream>
+#include "../include/LinkedList.hpp"
 
-AdjNode* createNode(int router, int cost) {
-    AdjNode* newNode = malloc(sizeof(AdjNode));
-
-    if (newNode == NULL) {
-        return NULL;
-    }
-
-    newNode->router = router;
-    newNode->cost = cost;
-    newNode->next = NULL;
-
-    return newNode;
+LinkedList::LinkedList()
+    : head(nullptr) {
 }
 
-void freeList(AdjNode* head) {
-    while (head != NULL) {
-        AdjNode* temp = head;
-        head = head->next;
-        free(temp);
+LinkedList::~LinkedList() {
+    clear();
+}
+
+void LinkedList::insert(int router, int cost) {
+    AdjNode* newNode = new AdjNode(router, cost);
+
+    newNode->next = head;
+    head = newNode;
+}
+
+void LinkedList::print() const {
+    AdjNode* current = head;
+
+    while (current != nullptr) {
+        std::cout << " -> Router " << current->router
+                  << " (cost: " << current->cost << ")";
+
+        current = current->next;
     }
+}
+
+void LinkedList::clear() {
+    AdjNode* current = head;
+
+    while (current != nullptr) {
+        AdjNode* next = current->next;
+        delete current;
+        current = next;
+    }
+
+    head = nullptr;
+}
+
+AdjNode* LinkedList::getHead() const {
+    return head;
 }
