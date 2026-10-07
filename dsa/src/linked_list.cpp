@@ -39,6 +39,6 @@ void LinkedList::clear() {
     head = nullptr;
 }
 
-AdjNode* LinkedList::getHead() const {
+const AdjNode* LinkedList::getHead() const {
     return head;
 }
