@@ -6,7 +6,7 @@
 class Graph {
 private:
     int numRouters;
-    AdjNode** adjacencyList;
+    LinkedList* adjacencyList;
 
 public:
     explicit Graph(int numRouters);
