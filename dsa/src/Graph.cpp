@@ -1,37 +1,24 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "../include/graph.h"
+#include <iostream>
+#include "../include/Graph.hpp"
 
-Graph* createGraph(int numRouters) {
+Graph::Graph(int numRouters)
+    : numRouters(numRouters), adjacencyList(nullptr) {
+
     if (numRouters <= 0) {
-        return NULL;
-    }
-
-    Graph* graph = malloc(sizeof(Graph));
-
-    if (graph == NULL) {
-        return NULL;
-    }
-
-    graph->numRouters = numRouters;
-
-    graph->adjacencyList = calloc(numRouters, sizeof(AdjNode*));
-
-    if (graph->adjacencyList == NULL) {
-        free(graph);
-        return NULL;
-    }
-
-    return graph;
-}
-
-void addEdge(Graph* graph, int source, int destination, int cost) {
-    if (graph == NULL) {
+        this->numRouters = 0;
         return;
     }
 
-    if (source < 0 || source >= graph->numRouters ||
-        destination < 0 || destination >= graph->numRouters) {
+    adjacencyList = new LinkedList[numRouters];
+}
+
+Graph::~Graph() {
+    delete[] adjacencyList;
+}
+
+void Graph::addEdge(int source, int destination, int cost) {
+    if (source < 0 || source >= numRouters ||
+        destination < 0 || destination >= numRouters) {
         return;
     }
 
@@ -39,47 +26,23 @@ void addEdge(Graph* graph, int source, int destination, int cost) {
         return;
     }
 
-    AdjNode* newNode = createNode(destination, cost);
-
-    if (newNode == NULL) {
-        return;
-    }
-
-    newNode->next = graph->adjacencyList[source];
-    graph->adjacencyList[source] = newNode;
+    adjacencyList[source].insert(destination, cost);
 }
 
-void printGraph(const Graph* graph) {
-    if (graph == NULL) {
+void Graph::printGraph() const {
+    if (adjacencyList == nullptr) {
         return;
     }
 
-    for (int i = 0; i < graph->numRouters; i++) {
-        printf("Router %d:", i);
+    for (int i = 0; i < numRouters; ++i) {
+        std::cout << "Router " << i << ":";
 
-        AdjNode* current = graph->adjacencyList[i];
+        adjacencyList[i].print();
 
-        while (current != NULL) {
-            printf(" -> Router %d (cost: %d)",
-                   current->router,
-                   current->cost);
-
-            current = current->next;
-        }
-
-        printf("\n");
+        std::cout << '\n';
     }
 }
 
-void freeGraph(Graph* graph) {
-    if (graph == NULL) {
-        return;
-    }
-
-    for (int i = 0; i < graph->numRouters; i++) {
-        freeList(graph->adjacencyList[i]);
-    }
-
-    free(graph->adjacencyList);
-    free(graph);
+int Graph::getNumRouters() const {
+    return numRouters;
 }
