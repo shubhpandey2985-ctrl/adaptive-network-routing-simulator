@@ -17,6 +17,8 @@ private:
 public:
     Queue();
     ~Queue();
+    Queue(const Queue&) = delete;
+    Queue& operator=(const Queue&) = delete;
 
     bool isEmpty() const;
 
