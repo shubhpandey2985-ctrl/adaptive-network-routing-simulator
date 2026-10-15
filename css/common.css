@@ -513,3 +513,76 @@ button {
         width: 92vw;
     }
 }
+
+/* Global navigation */
+
+html {
+    scroll-padding-top: 90px;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+.mobile-menu-btn {
+    display: none;
+}
+
+@media (max-width: 900px) {
+
+    .topbar {
+        position: relative;
+        z-index: 50;
+    }
+
+    .mobile-menu-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        padding: 0;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.04);
+        color: #dce7e3;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .main-nav {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        right: 0;
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        padding: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        background: rgba(7, 13, 16, 0.97);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+        z-index: 60;
+    }
+
+    .main-nav.open {
+        display: flex;
+    }
+
+    .main-nav .nav-link {
+        width: 100%;
+        padding: 12px 14px;
+    }
+
+    .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .top-actions .utility-link {
+        display: none;
+    }
+
+}

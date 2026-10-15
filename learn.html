@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Learn | NETROUTE</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,36 +14,43 @@
 </head>
 
 <body class="learn-page">
-
     <div class="page-container">
 
+        <!-- Navigation -->
         <header class="topbar">
-            <a href="index.html" class="brand">
+            <a href="index.html" class="brand" aria-label="NETROUTE Home">
                 <span class="brand-mark">⚡</span>
-
                 <span>
                     <span class="brand-name">NETROUTE</span>
                     <span class="brand-sub">NETWORK LAB</span>
                 </span>
             </a>
 
-            <nav class="main-nav">
+            <nav class="main-nav" aria-label="Main navigation">
                 <a href="index.html" class="nav-link">Home</a>
-                <a href="#" class="nav-link">Network Lab</a>
-                <a href="#" class="nav-link">Modes</a>
-                <a href="learn.html" class="nav-link active">Learn</a>
-                <a href="#" class="nav-link">Quiz</a>
+                <a href="lab.html" class="nav-link">Network Lab</a>
+                <a href="modes.html" class="nav-link">Modes</a>
+                <a href="learn.html" class="nav-link active" aria-current="page">Learn</a>
+                <a href="quiz.html" class="nav-link">Quiz</a>
             </nav>
 
             <div class="top-actions">
-                <a href="how-to-play.html" class="nav-link utility-link"> How to Play</a>
-                <a href="#" class="nav-link utility-link">Settings</a>
-                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">☰</button>
+                <a href="how-to-play.html" class="nav-link utility-link">How to Play</a>
+                <a href="settings.html" class="nav-link utility-link" aria-label="Settings">Settings</a>
+
+                <button
+                    class="icon-btn mobile-menu-btn"
+                    id="mobileMenuBtn"
+                    aria-label="Open navigation"
+                    aria-expanded="false"
+                    type="button"
+                >
+                    ☰
+                </button>
             </div>
         </header>
 
         <main>
-
             <!-- Hero -->
             <section class="learn-hero">
                 <div class="hero-grid"></div>
@@ -120,7 +126,7 @@
                 </div>
             </section>
 
-            <!-- Progress -->
+            <!-- Learning progress -->
             <section class="learning-progress">
                 <div>
                     <span class="progress-label">YOUR LEARNING PATH</span>
@@ -132,9 +138,8 @@
                 </div>
             </section>
 
-            <!-- Module 1 -->
+            <!-- Module 1: Network basics -->
             <section class="learn-module" id="network-basics">
-
                 <div class="module-heading">
                     <span class="module-number">01</span>
 
@@ -148,9 +153,7 @@
                 </div>
 
                 <div class="network-learning-panel">
-
                     <div class="network-stage" id="basicNetwork">
-
                         <svg viewBox="0 0 800 430">
                             <line class="network-edge" x1="120" y1="215" x2="300" y2="95"/>
                             <line class="network-edge" x1="120" y1="215" x2="300" y2="335"/>
@@ -174,18 +177,17 @@
                             <text x="670" y="260">R6</text>
                         </svg>
 
-                        <button class="network-hotspot hotspot-router" data-concept="router">
+                        <button class="network-hotspot hotspot-router" data-concept="router" type="button">
                             <span>ROUTER</span>
                         </button>
 
-                        <button class="network-hotspot hotspot-link" data-concept="link">
+                        <button class="network-hotspot hotspot-link" data-concept="link" type="button">
                             <span>LINK</span>
                         </button>
 
-                        <button class="network-hotspot hotspot-packet" data-concept="packet">
+                        <button class="network-hotspot hotspot-packet" data-concept="packet" type="button">
                             <span>PACKET</span>
                         </button>
-
                     </div>
 
                     <div class="concept-panel" id="conceptPanel">
@@ -195,13 +197,11 @@
                             Click a router, link, or packet to discover what each part does.
                         </p>
                     </div>
-
                 </div>
             </section>
 
-            <!-- Module 2 -->
+            <!-- Module 2: Packet journey -->
             <section class="learn-module dark-module">
-
                 <div class="module-heading">
                     <span class="module-number">02</span>
 
@@ -215,10 +215,8 @@
                 </div>
 
                 <div class="packet-panel">
-
                     <div class="packet-network">
                         <svg viewBox="0 0 800 300">
-
                             <line class="packet-edge" x1="90" y1="150" x2="270" y2="80"/>
                             <line class="packet-edge" x1="270" y1="80" x2="480" y2="150"/>
                             <line class="packet-edge" x1="480" y1="150" x2="700" y2="150"/>
@@ -244,22 +242,19 @@
                         </div>
 
                         <h3 id="packetTitle">I'm a packet.</h3>
-
                         <p id="packetDescription">
                             I need to travel from R1 to R6. Let's see how many hops it takes.
                         </p>
 
-                        <button class="btn btn-primary" id="playPacket">
+                        <button class="btn btn-primary" id="playPacket" type="button">
                             ▶ PLAY JOURNEY
                         </button>
                     </div>
-
                 </div>
             </section>
 
-            <!-- Module 3 -->
+            <!-- Module 3: Multiple paths -->
             <section class="learn-module">
-
                 <div class="module-heading">
                     <span class="module-number">03</span>
 
@@ -273,10 +268,8 @@
                 </div>
 
                 <div class="path-lab">
-
                     <div class="path-network">
                         <svg viewBox="0 0 800 360">
-
                             <line class="path-edge" x1="100" y1="180" x2="280" y2="90"/>
                             <line class="path-edge" x1="280" y1="90" x2="520" y2="90"/>
                             <line class="path-edge" x1="520" y1="90" x2="700" y2="180"/>
@@ -310,31 +303,27 @@
                     </div>
 
                     <div class="path-options">
-
-                        <button class="path-option active" data-path="top">
+                        <button class="path-option active" data-path="top" type="button">
                             <span class="path-name">PATH A</span>
                             <strong>R1 → R2 → R4 → R6</strong>
                             <span class="path-cost">TOTAL COST <b>5</b></span>
                         </button>
 
-                        <button class="path-option" data-path="bottom">
+                        <button class="path-option" data-path="bottom" type="button">
                             <span class="path-name">PATH B</span>
                             <strong>R1 → R3 → R5 → R6</strong>
                             <span class="path-cost">TOTAL COST <b>5</b></span>
                         </button>
-
                     </div>
 
                     <div class="path-message" id="pathMessage">
                         Both routes currently have the same total cost.
                     </div>
-
                 </div>
             </section>
 
-            <!-- Module 4 -->
+            <!-- Module 4: Router failure -->
             <section class="learn-module dark-module">
-
                 <div class="module-heading">
                     <span class="module-number">04</span>
 
@@ -348,11 +337,8 @@
                 </div>
 
                 <div class="failure-lab">
-
                     <div class="failure-network">
-
                         <svg viewBox="0 0 800 380">
-
                             <line class="failure-edge" x1="100" y1="190" x2="290" y2="90"/>
                             <line class="failure-edge" x1="100" y1="190" x2="290" y2="290"/>
                             <line class="failure-edge" x1="290" y1="90" x2="500" y2="190"/>
@@ -373,38 +359,32 @@
 
                             <circle id="failurePacket" class="failure-packet" cx="100" cy="190" r="7"/>
                         </svg>
-
                     </div>
 
                     <div class="failure-controls">
-
                         <div class="failure-state" id="failureState">
                             <span class="status-dot"></span>
                             NETWORK HEALTHY
                         </div>
 
                         <h3 id="failureTitle">Everything looks fine.</h3>
-
                         <p id="failureDescription">
                             The packet has a working route to its destination.
                         </p>
 
-                        <button class="btn btn-danger" id="failRouter">
+                        <button class="btn btn-danger" id="failRouter" type="button">
                             ⚠ FAIL R2
                         </button>
 
-                        <button class="btn btn-secondary" id="resetFailure">
+                        <button class="btn btn-secondary" id="resetFailure" type="button">
                             RESET NETWORK
                         </button>
-
                     </div>
-
                 </div>
             </section>
 
-            <!-- Module 5 -->
+            <!-- Module 5: Path cost -->
             <section class="learn-module">
-
                 <div class="module-heading">
                     <span class="module-number">05</span>
 
@@ -418,7 +398,6 @@
                 </div>
 
                 <div class="cost-card">
-
                     <div class="cost-visual">
                         <div class="cost-route">
                             <span>R1</span>
@@ -453,13 +432,11 @@
                             <span>TOTAL PATH COST</span>
                         </div>
                     </div>
-
                 </div>
             </section>
 
-            <!-- Module 6 -->
+            <!-- Module 6: Dijkstra -->
             <section class="learn-module dark-module">
-
                 <div class="module-heading">
                     <span class="module-number">06</span>
 
@@ -473,11 +450,8 @@
                 </div>
 
                 <div class="dijkstra-lab">
-
                     <div class="dijkstra-network">
-
                         <svg viewBox="0 0 800 390">
-
                             <line class="d-edge" x1="100" y1="195" x2="280" y2="90"/>
                             <line class="d-edge" x1="100" y1="195" x2="280" y2="300"/>
                             <line class="d-edge" x1="280" y1="90" x2="500" y2="145"/>
@@ -498,13 +472,10 @@
                             <text x="482" y="110">R4</text>
                             <text x="482" y="290">R5</text>
                             <text x="680" y="240">R6</text>
-
                         </svg>
-
                     </div>
 
                     <div class="algorithm-steps">
-
                         <div class="algorithm-step active" data-step="0">
                             <span>01</span>
                             <div>
@@ -537,18 +508,15 @@
                             </div>
                         </div>
 
-                        <button class="btn btn-primary" id="nextDijkstra">
+                        <button class="btn btn-primary" id="nextDijkstra" type="button">
                             NEXT STEP →
                         </button>
-
                     </div>
-
                 </div>
             </section>
 
-            <!-- Module 7 -->
+            <!-- Module 7: Recovery -->
             <section class="learn-module">
-
                 <div class="module-heading">
                     <span class="module-number">07</span>
 
@@ -562,7 +530,6 @@
                 </div>
 
                 <div class="recovery-flow">
-
                     <div class="flow-card">
                         <span>01</span>
                         <strong>NETWORK</strong>
@@ -592,7 +559,6 @@
                         <strong>RECOVERY</strong>
                         <p>An alternate route can restore communication.</p>
                     </div>
-
                 </div>
 
                 <div class="learn-finale">
@@ -604,24 +570,25 @@
                         </p>
                     </div>
 
-                    <a href="#" class="btn btn-primary">ENTER NETWORK LAB →</a>
+                    <a href="lab.html" class="btn btn-primary">
+                        ENTER NETWORK LAB →
+                    </a>
                 </div>
-
             </section>
-
         </main>
 
+        <!-- Footer -->
         <footer class="learn-footer">
             <div>
                 <strong>NETROUTE</strong>
-                <span>Adaptive Network Routing & Failure Recovery</span>
+                <span>Adaptive Network Routing &amp; Failure Recovery</span>
             </div>
 
             <span>NETWORK ACADEMY / LEARN</span>
         </footer>
-
     </div>
 
     <script src="js/learn.js"></script>
+    <script src="js/common.js"></script>
 </body>
 </html>
