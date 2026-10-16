@@ -454,3 +454,98 @@
         padding: 25px 20px;
     }
 }
+
+/* Theme compatibility for How to Play */
+
+.guide-hero,
+.guide-section,
+.rules-section {
+    color: var(--text);
+}
+
+.guide-hero h1 span,
+.guide-section h2 span,
+.guide-cta h2 span {
+    color: var(--cyan);
+}
+
+.guide-hero p,
+.guide-section p,
+.guide-cta p {
+    color: var(--muted);
+}
+
+.mission-preview,
+.step-card,
+.rules-card,
+.guide-cta {
+    border-color: var(--line);
+    background-color: var(--panel);
+    color: var(--text);
+}
+
+.mission-preview {
+    background:
+        radial-gradient(circle at 50% 50%, var(--cyan-glow), transparent 55%),
+        var(--panel);
+}
+
+.step-card {
+    background: var(--panel-background);
+}
+
+.rules-card {
+    background:
+        radial-gradient(circle at 90% 10%, var(--cyan-glow), transparent 35%),
+        var(--panel);
+}
+
+.rule-item {
+    border-color: var(--line);
+}
+
+.rule-item p {
+    color: var(--muted-light);
+}
+
+.preview-header,
+.preview-route,
+.router-label,
+.site-footer {
+    color: var(--muted);
+}
+
+.preview-route span {
+    color: var(--text);
+}
+
+.preview-network {
+    background-color: var(--panel-2);
+}
+
+.guide-router {
+    fill: var(--panel-2);
+}
+
+.guide-cta {
+    background:
+        linear-gradient(110deg, var(--cyan-glow), var(--green-glow)),
+        var(--panel);
+}
+
+:root[data-theme="light-network"] .guide-link {
+    stroke: rgba(23, 105, 210, .35);
+}
+
+:root[data-theme="light-network"] .guide-router {
+    fill: #ffffff;
+}
+
+:root[data-theme="light-network"] .step-number,
+:root[data-theme="light-network"] .rule-item span {
+    color: var(--muted);
+}
+
+:root[data-theme="light-network"] .site-footer {
+    border-top-color: var(--line);
+}

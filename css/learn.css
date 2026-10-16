@@ -1058,3 +1058,92 @@ button:disabled {
         cx 1s cubic-bezier(.2, .7, .2, 1),
         cy 1s cubic-bezier(.2, .7, .2, 1);
 }
+
+/* Theme compatibility for Learn page */
+
+.learn-page {
+    --learn-cyan: var(--cyan);
+    --learn-green: var(--green);
+    --learn-pink: var(--pink);
+}
+
+.learn-page .dark-module {
+    background:
+        radial-gradient(circle at 15% 30%, var(--cyan-glow), transparent 35%),
+        var(--bg);
+    border-color: var(--line);
+}
+
+.learn-page .network-learning-panel,
+.learn-page .packet-panel,
+.learn-page .path-lab {
+    background: var(--panel);
+    border-color: var(--line);
+}
+
+.learn-page .network-stage,
+.learn-page .packet-network,
+.learn-page .path-network {
+    background-color: var(--panel);
+}
+
+.learn-page .concept-panel {
+    background: var(--panel-background);
+    border-color: var(--line);
+}
+
+.learn-page .network-hotspot {
+    background: var(--panel);
+    border-color: var(--line);
+    color: var(--muted);
+}
+
+.learn-page .path-option {
+    color: var(--text);
+}
+
+.learn-page .progress-track {
+    background: var(--line);
+}
+
+.learn-page .hero-router,
+.learn-page .network-node,
+.learn-page .packet-router,
+.learn-page .path-node {
+    fill: var(--panel-2);
+}
+
+.learn-page .hero-link,
+.learn-page .network-edge,
+.learn-page .packet-edge,
+.learn-page .path-edge {
+    stroke: var(--line);
+}
+
+.learn-page .network-stage text,
+.learn-page .packet-network text,
+.learn-page .path-network text,
+.learn-page .hero-network text {
+    fill: var(--muted);
+}
+
+:root[data-theme="light-network"] .learn-page .hero-grid,
+:root[data-theme="light-network"] .learn-page .network-stage {
+    opacity: .85;
+}
+
+:root[data-theme="light-network"] .learn-page .learn-hero,
+:root[data-theme="light-network"] .learn-page .learning-progress {
+    background: transparent;
+}
+
+:root[data-theme="light-network"] .learn-page .network-learning-panel,
+:root[data-theme="light-network"] .learn-page .packet-panel,
+:root[data-theme="light-network"] .learn-page .path-lab {
+    box-shadow: 0 12px 36px rgba(30, 55, 90, .08);
+}
+
+:root[data-theme="light-network"] .learn-page .hero-packet,
+:root[data-theme="light-network"] .learn-page .learning-packet {
+    filter: none;
+}
