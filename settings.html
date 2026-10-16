@@ -1,147 +1,266 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#070a12">
+
     <title>Settings | NETROUTE</title>
 
+    <!-- Apply saved theme before rendering the page -->
     <script>
         (() => {
             try {
                 const theme = localStorage.getItem("netroute-theme");
-                const allowed = ["dark-neon", "light-network", "midnight-purple"];
+                const allowedThemes = [
+                    "dark-neon",
+                    "light-network",
+                    "midnight-purple"
+                ];
+
                 document.documentElement.dataset.theme =
-                    allowed.includes(theme) ? theme : "dark-neon";
+                    allowedThemes.includes(theme) ? theme : "dark-neon";
             } catch (error) {
                 document.documentElement.dataset.theme = "dark-neon";
             }
         })();
     </script>
 
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
 
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/settings.css">
 
+    <!-- Load shared navigation and page settings scripts ONCE -->
     <script src="js/common.js" defer></script>
     <script src="js/settings.js" defer></script>
 </head>
+
 <body>
+    <!-- ==================== NAVIGATION ==================== -->
     <header class="topbar">
         <a class="brand" href="index.html" aria-label="NETROUTE Home">
             <span class="brand-mark" aria-hidden="true">N</span>
+
             <span>
                 <span class="brand-name">NETROUTE</span>
                 <span class="brand-sub">NETWORK LAB</span>
             </span>
         </a>
 
-        <nav class="main-nav" aria-label="Main navigation">
+        <nav
+            class="main-nav"
+            id="main-navigation"
+            aria-label="Main navigation"
+        >
             <a class="nav-link" href="index.html">Home</a>
             <a class="nav-link" href="lab.html">Network Lab</a>
             <a class="nav-link" href="modes.html">Modes</a>
             <a class="nav-link" href="learn.html">Learn</a>
             <a class="nav-link" href="quiz.html">Quiz</a>
             <a class="nav-link" href="how-to-play.html">How to Play</a>
-            <a class="nav-link" href="settings.html">Settings</a>
+            <a
+                class="nav-link active"
+                href="settings.html"
+                aria-current="page"
+            >Settings</a>
         </nav>
 
         <div class="top-actions">
             <span class="settings-status">SYSTEM CONFIG</span>
+
             <button
                 class="mobile-menu-btn"
                 id="mobileMenuBtn"
                 type="button"
-                aria-label="Open menu"
+                aria-label="Open navigation"
                 aria-expanded="false"
                 aria-controls="main-navigation"
             >☰</button>
         </div>
     </header>
 
+    <!-- ==================== MAIN CONTENT ==================== -->
     <main class="settings-page">
+
+        <!-- Hero -->
         <section class="settings-hero">
             <div class="settings-eyebrow">
                 <span class="settings-live-dot"></span>
                 USER PREFERENCES / CONFIGURATION
             </div>
-            <h1>YOUR LAB.<br><span>YOUR RULES.</span></h1>
-            <p>Personalize your network learning experience. Your appearance and preferences are saved on this device.</p>
+
+            <h1>
+                YOUR LAB.<br>
+                <span>YOUR RULES.</span>
+            </h1>
+
+            <p>
+                Personalize your network learning experience.
+                Your appearance and preferences are saved on this device.
+            </p>
         </section>
 
-        <section class="settings-content" aria-label="Application settings">
+        <!-- Settings content -->
+        <section
+            class="settings-content"
+            aria-label="Application settings"
+        >
+
+            <!-- ==================== THEME SETTINGS ==================== -->
             <div class="settings-section-heading">
                 <div>
                     <span class="settings-kicker">01 / APPEARANCE</span>
                     <h2>Choose your theme</h2>
-                    <p>Change the visual style of NETROUTE across supported pages.</p>
+                    <p>
+                        Change the visual style of NETROUTE across
+                        supported pages.
+                    </p>
                 </div>
-                <span class="settings-current" id="currentThemeLabel">DARK NEON</span>
+
+                <span
+                    class="settings-current"
+                    id="currentThemeLabel"
+                >DARK NEON</span>
             </div>
 
-            <div class="theme-grid" role="radiogroup" aria-label="Color theme">
-                <button class="theme-card" type="button" role="radio"
-                    aria-checked="true" data-theme-choice="dark-neon">
-                    <span class="theme-preview preview-dark" aria-hidden="true">
+            <div
+                class="theme-grid"
+                role="radiogroup"
+                aria-label="Color theme"
+            >
+
+                <!-- Dark Neon -->
+                <button
+                    class="theme-card"
+                    type="button"
+                    role="radio"
+                    aria-checked="true"
+                    data-theme-choice="dark-neon"
+                >
+                    <span
+                        class="theme-preview preview-dark"
+                        aria-hidden="true"
+                    >
                         <span class="preview-top"></span>
                         <span class="preview-sidebar"></span>
                         <span class="preview-panel"></span>
                         <span class="preview-line"></span>
                         <span class="preview-dot"></span>
                     </span>
+
                     <span class="theme-card-title">Dark Neon</span>
-                    <span class="theme-card-description">Cyber-inspired · Cyan and green</span>
-                    <span class="theme-card-footer"><span class="theme-radio"></span> DEFAULT THEME</span>
+
+                    <span class="theme-card-description">
+                        Cyber-inspired · Cyan and green
+                    </span>
+
+                    <span class="theme-card-footer">
+                        <span class="theme-radio"></span>
+                        DEFAULT THEME
+                    </span>
                 </button>
 
-                <button class="theme-card" type="button" role="radio"
-                    aria-checked="false" data-theme-choice="light-network">
-                    <span class="theme-preview preview-light" aria-hidden="true">
+                <!-- Light Network -->
+                <button
+                    class="theme-card"
+                    type="button"
+                    role="radio"
+                    aria-checked="false"
+                    data-theme-choice="light-network"
+                >
+                    <span
+                        class="theme-preview preview-light"
+                        aria-hidden="true"
+                    >
                         <span class="preview-top"></span>
                         <span class="preview-sidebar"></span>
                         <span class="preview-panel"></span>
                         <span class="preview-line"></span>
                         <span class="preview-dot"></span>
                     </span>
+
                     <span class="theme-card-title">Light Network</span>
-                    <span class="theme-card-description">Clean · White and blue</span>
-                    <span class="theme-card-footer"><span class="theme-radio"></span> LIGHT MODE</span>
+
+                    <span class="theme-card-description">
+                        Clean · White and blue
+                    </span>
+
+                    <span class="theme-card-footer">
+                        <span class="theme-radio"></span>
+                        LIGHT MODE
+                    </span>
                 </button>
 
-                <button class="theme-card" type="button" role="radio"
-                    aria-checked="false" data-theme-choice="midnight-purple">
-                    <span class="theme-preview preview-purple" aria-hidden="true">
+                <!-- Midnight Purple -->
+                <button
+                    class="theme-card"
+                    type="button"
+                    role="radio"
+                    aria-checked="false"
+                    data-theme-choice="midnight-purple"
+                >
+                    <span
+                        class="theme-preview preview-purple"
+                        aria-hidden="true"
+                    >
                         <span class="preview-top"></span>
                         <span class="preview-sidebar"></span>
                         <span class="preview-panel"></span>
                         <span class="preview-line"></span>
                         <span class="preview-dot"></span>
                     </span>
+
                     <span class="theme-card-title">Midnight Purple</span>
-                    <span class="theme-card-description">Deep navy · Violet and magenta</span>
-                    <span class="theme-card-footer"><span class="theme-radio"></span> NIGHT MODE</span>
+
+                    <span class="theme-card-description">
+                        Deep navy · Violet and magenta
+                    </span>
+
+                    <span class="theme-card-footer">
+                        <span class="theme-radio"></span>
+                        NIGHT MODE
+                    </span>
                 </button>
             </div>
 
+            <!-- ==================== LEARNING PREFERENCES ==================== -->
             <div class="settings-section-heading preferences-heading">
                 <div>
                     <span class="settings-kicker">02 / LEARNING</span>
                     <h2>Learning preferences</h2>
-                    <p>Choose how you prefer to explore networking concepts.</p>
+                    <p>
+                        Choose how you prefer to explore networking concepts.
+                    </p>
                 </div>
             </div>
 
             <div class="preference-list">
+
+                <!-- Learning mode -->
                 <div class="preference-row">
                     <div class="preference-copy">
                         <h3>Learning mode</h3>
-                        <p>Beginner uses simpler explanations. Technical mode is intended for deeper terminology and detail.</p>
+                        <p>
+                            Beginner uses simpler explanations.
+                            Technical mode is intended for deeper
+                            terminology and detail.
+                        </p>
                     </div>
+
                     <div class="preference-control">
-                        <label class="sr-only" for="learningMode">Learning mode</label>
+                        <label class="sr-only" for="learningMode">
+                            Learning mode
+                        </label>
+
                         <select id="learningMode">
                             <option value="beginner">Beginner</option>
                             <option value="technical">Technical</option>
@@ -149,13 +268,21 @@
                     </div>
                 </div>
 
+                <!-- Animations -->
                 <div class="preference-row">
                     <div class="preference-copy">
                         <h3>Animations</h3>
-                        <p>Reduce optional interface motion if you prefer a calmer experience.</p>
+                        <p>
+                            Reduce optional interface motion if you
+                            prefer a calmer experience.
+                        </p>
                     </div>
+
                     <div class="preference-control">
-                        <label class="sr-only" for="animationMode">Animation preference</label>
+                        <label class="sr-only" for="animationMode">
+                            Animation preference
+                        </label>
+
                         <select id="animationMode">
                             <option value="on">Enabled</option>
                             <option value="reduced">Reduced motion</option>
@@ -163,43 +290,65 @@
                     </div>
                 </div>
 
+                <!-- Sound -->
                 <div class="preference-row">
                     <div class="preference-copy">
                         <h3>Sound effects</h3>
-                        <p>Save your preference for sound effects where they are supported.</p>
+                        <p>
+                            Save your preference for sound effects
+                            where they are supported.
+                        </p>
                     </div>
+
                     <div class="preference-control">
-                        <label class="sr-only" for="soundMode">Sound effects</label>
+                        <label class="sr-only" for="soundMode">
+                            Sound effects
+                        </label>
+
                         <select id="soundMode">
                             <option value="off">Off</option>
                             <option value="on">On</option>
                         </select>
                     </div>
                 </div>
+
             </div>
 
+            <!-- ==================== RESET SETTINGS ==================== -->
             <div class="settings-bottom">
                 <div>
                     <h3>Want to start fresh?</h3>
-                    <p>Restore Dark Neon and the default learning preferences.</p>
+                    <p>
+                        Restore Dark Neon and the default learning
+                        preferences.
+                    </p>
                 </div>
-                <button class="btn btn-danger" id="resetSettings" type="button">
+
+                <button
+                    class="btn btn-danger"
+                    id="resetSettings"
+                    type="button"
+                >
                     Reset settings
                 </button>
             </div>
 
-            <p class="settings-feedback" id="settingsFeedback" role="status" aria-live="polite"></p>
+            <!-- Feedback for save/reset actions -->
+            <p
+                class="settings-feedback"
+                id="settingsFeedback"
+                role="status"
+                aria-live="polite"
+            ></p>
+
         </section>
     </main>
 
+    <!-- ==================== FOOTER ==================== -->
     <footer class="settings-footer">
         <span>NETROUTE // NETWORK LAB</span>
         <span>CONFIGURATION STORED LOCALLY</span>
     </footer>
-
-    <script src="js/common.js" defer></script>
-    <script src="js/settings.js" defer></script>
-
 
 </body>
 </html>

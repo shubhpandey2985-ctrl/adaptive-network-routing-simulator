@@ -838,3 +838,60 @@ select {
         border-color 0.2s ease,
         color 0.2s ease;
 }
+
+
+/* NETROUTE mobile navigation fix */
+@media (max-width: 900px) {
+    .topbar {
+        position: relative;
+        z-index: 100;
+    }
+
+    .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .mobile-menu-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        position: relative;
+        z-index: 102;
+    }
+
+    .main-nav {
+        display: none;
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--bg, #0b1020);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+        z-index: 101;
+    }
+
+    .main-nav.open {
+        display: flex !important;
+    }
+
+    .main-nav .nav-link {
+        display: block;
+        width: 100%;
+        padding: 12px 14px;
+        box-sizing: border-box;
+    }
+
+    /* Utility links are placed in the menu in the HTML fix below. */
+    .top-actions .utility-link {
+        display: none;
+    }
+}

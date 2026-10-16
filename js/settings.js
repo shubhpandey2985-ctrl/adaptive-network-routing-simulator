@@ -1,187 +1,174 @@
+
 /* NETROUTE — Settings page */
 
-document.addEventListener("DOMContentLoaded", () => {
+(() => {
     "use strict";
 
-    const settings = window.NETROUTE_SETTINGS;
+    document.addEventListener("DOMContentLoaded", () => {
+        const settings = window.NETROUTE_SETTINGS;
 
-    const themeCards = document.querySelectorAll("[data-theme-choice]");
-    const currentThemeLabel = document.getElementById("currentThemeLabel");
-    const learningMode = document.getElementById("learningMode");
-    const animationMode = document.getElementById("animationMode");
-    const soundMode = document.getElementById("soundMode");
-    const resetButton = document.getElementById("resetSettings");
-    const feedback = document.getElementById("settingsFeedback");
-
-    const themeNames = {
-        "dark-neon": "DARK NEON",
-        "light-network": "LIGHT NETWORK",
-        "midnight-purple": "MIDNIGHT PURPLE"
-    };
-
-    let feedbackTimeout;
-
-    function showFeedback(message) {
-        if (!feedback) return;
-
-        feedback.textContent = message;
-
-        window.clearTimeout(feedbackTimeout);
-
-        feedbackTimeout = window.setTimeout(() => {
-            feedback.textContent = "";
-        }, 3000);
-    }
-
-    function updateThemeSelection(theme) {
-        themeCards.forEach(card => {
-            const selected = card.dataset.themeChoice === theme;
-
-            card.setAttribute("aria-checked", String(selected));
-            card.tabIndex = selected ? 0 : -1;
-        });
-
-        if (currentThemeLabel) {
-            currentThemeLabel.textContent =
-                themeNames[theme] || themeNames["dark-neon"];
-        }
-    }
-
-    function loadPreferences() {
         if (!settings) {
-            showFeedback(
-                "Settings could not initialize. Check js/common.js."
-            );
             console.error(
-                "NETROUTE_SETTINGS is missing. Check that js/common.js loads successfully before js/settings.js."
+                "NETROUTE settings are unavailable. Check that common.js loads before settings.js."
             );
             return;
         }
 
-        const preferences = settings.getPreferences();
+        const themeCards = document.querySelectorAll(
+            "[data-theme-choice]"
+        );
 
-        updateThemeSelection(preferences.theme);
+        const learningMode = document.getElementById(
+            "learningMode"
+        );
 
-        if (learningMode) {
-            learningMode.value = preferences.learningMode;
+        const animationMode = document.getElementById(
+            "animationMode"
+        );
+
+        const soundMode = document.getElementById(
+            "soundMode"
+        );
+
+        const resetButton = document.getElementById(
+            "resetSettings"
+        );
+
+        const feedback = document.getElementById(
+            "settingsFeedback"
+        );
+
+        let feedbackTimeout;
+
+        // Display one inline feedback message without browser alerts.
+        function showFeedback(message) {
+            if (!feedback) return;
+
+            window.clearTimeout(feedbackTimeout);
+
+            feedback.textContent = message;
+            feedback.classList.add("show");
+            feedback.setAttribute("role", "status");
+            feedback.setAttribute("aria-live", "polite");
+
+            feedbackTimeout = window.setTimeout(() => {
+                feedback.classList.remove("show");
+            }, 3000);
         }
 
-        if (animationMode) {
-            animationMode.value = preferences.animations;
+        // Highlight the currently selected theme.
+        function updateThemeCards(selectedTheme) {
+            themeCards.forEach((card) => {
+                const isSelected =
+                    card.dataset.themeChoice === selectedTheme;
+
+                card.classList.toggle("active", isSelected);
+                card.classList.toggle("selected", isSelected);
+
+                card.setAttribute(
+                    "aria-pressed",
+                    String(isSelected)
+                );
+            });
         }
 
-        if (soundMode) {
-            soundMode.value = preferences.sound;
-        }
-    }
+        // Load saved preferences into the settings controls.
+        function loadSettings() {
+            const preferences = settings.getPreferences();
 
-    // Theme selection.
-    themeCards.forEach(card => {
-        card.addEventListener("click", () => {
-            if (!settings) {
-                showFeedback("Theme system unavailable. Check the Console.");
-                return;
+            updateThemeCards(preferences.theme);
+
+            if (learningMode) {
+                learningMode.value = preferences.learningMode;
             }
 
-            const selectedTheme = card.dataset.themeChoice;
+            if (animationMode) {
+                animationMode.value = preferences.animations;
+            }
 
-            const appliedTheme = settings.applyTheme(selectedTheme);
+            if (soundMode) {
+                soundMode.value = preferences.sound;
+            }
 
-            updateThemeSelection(appliedTheme);
+            document.documentElement.dataset.animations =
+                preferences.animations;
+        }
 
-            showFeedback(
-                `${themeNames[appliedTheme]} theme selected and saved.`
-            );
+        // Theme selection.
+        themeCards.forEach((card) => {
+            card.addEventListener("click", () => {
+                const selectedTheme = card.dataset.themeChoice;
+
+                if (!settings.themes.includes(selectedTheme)) {
+                    return;
+                }
+
+                settings.applyTheme(selectedTheme);
+                updateThemeCards(selectedTheme);
+
+                showFeedback("Theme updated successfully.");
+            });
         });
 
-        card.addEventListener("keydown", event => {
-            const keys = [
-                "ArrowLeft",
-                "ArrowRight",
-                "ArrowUp",
-                "ArrowDown"
-            ];
+        // Learning mode selection.
+        if (learningMode) {
+            learningMode.addEventListener("change", () => {
+                settings.savePreference(
+                    "learningMode",
+                    learningMode.value
+                );
 
-            if (!keys.includes(event.key)) return;
+                showFeedback("Learning mode saved.");
+            });
+        }
 
-            event.preventDefault();
+        // Animation preference.
+        if (animationMode) {
+            animationMode.addEventListener("change", () => {
+                settings.savePreference(
+                    "animations",
+                    animationMode.value
+                );
 
-            const cards = Array.from(themeCards);
-            const currentIndex = cards.indexOf(card);
-            const forward =
-                event.key === "ArrowRight" ||
-                event.key === "ArrowDown";
+                showFeedback("Animation preference saved.");
+            });
+        }
 
-            const nextIndex =
-                (currentIndex + (forward ? 1 : -1) + cards.length) %
-                cards.length;
+        // Sound preference.
+        if (soundMode) {
+            soundMode.addEventListener("change", () => {
+                settings.savePreference(
+                    "sound",
+                    soundMode.value
+                );
 
-            cards[nextIndex].focus();
-            cards[nextIndex].click();
-        });
+                showFeedback("Sound preference saved.");
+            });
+        }
+
+        // Reset all settings to their defaults.
+        if (resetButton) {
+            resetButton.addEventListener("click", (event) => {
+                event.preventDefault();
+
+                settings.resetSettings();
+                loadSettings();
+
+                // Only one feedback call; no alert() is used.
+                showFeedback("Settings restored to defaults.");
+            });
+        }
+
+        // Keep theme selection in sync if changed elsewhere.
+        document.addEventListener(
+            "netroute:themechange",
+            (event) => {
+                if (event.detail?.theme) {
+                    updateThemeCards(event.detail.theme);
+                }
+            }
+        );
+
+        loadSettings();
     });
-
-    // Learning mode preference.
-    if (learningMode) {
-        learningMode.addEventListener("change", () => {
-            if (!settings) return;
-
-            settings.savePreference(
-                "learningMode",
-                learningMode.value
-            );
-
-            showFeedback("Learning preference saved.");
-        });
-    }
-
-    // Animation preference.
-    if (animationMode) {
-        animationMode.addEventListener("change", () => {
-            if (!settings) return;
-
-            settings.savePreference(
-                "animations",
-                animationMode.value
-            );
-
-            showFeedback("Animation preference saved.");
-        });
-    }
-
-    // Sound preference.
-    if (soundMode) {
-        soundMode.addEventListener("change", () => {
-            if (!settings) return;
-
-            settings.savePreference("sound", soundMode.value);
-
-            showFeedback("Sound preference saved.");
-        });
-    }
-
-    // Restore default settings.
-    if (resetButton) {
-        resetButton.addEventListener("click", () => {
-            if (!settings) return;
-
-            const confirmed = window.confirm(
-                "Reset all NETROUTE settings to their defaults?"
-            );
-
-            if (!confirmed) return;
-
-            settings.resetSettings();
-            loadPreferences();
-
-            showFeedback("Settings restored to defaults.");
-        });
-    }
-
-    // Keep the selection indicator synchronized with global theme changes.
-    document.addEventListener("netroute:themechange", event => {
-        updateThemeSelection(event.detail.theme);
-    });
-
-    loadPreferences();
-});
+})();
