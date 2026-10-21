@@ -1,17 +1,26 @@
 
+/* =====================================================
+   NETROUTE — MODES PAGE
+   Theme-aware styling
+   File: css/modes.css
+   ===================================================== */
+
+/* Map the shared NETROUTE theme variables to Modes. */
 .modes-page {
-    --modes-bg: #0b0717;
-    --modes-header: #100a20;
-    --modes-card: #1b1230;
-    --modes-card-hover: #25183d;
-    --modes-border: #493064;
-    --modes-text: #f4edff;
-    --modes-muted: #a69ab9;
-    --modes-purple: #bd79ff;
-    --modes-cyan: #38bdf8;
+    --modes-bg: var(--bg);
+    --modes-header: var(--topbar-bg);
+    --modes-card: var(--panel);
+    --modes-card-hover: var(--panel-2);
+    --modes-border: var(--line);
+    --modes-text: var(--text);
+    --modes-muted: var(--muted);
+    --modes-accent: var(--cyan);
+    --modes-secondary: var(--green);
+    --modes-danger: var(--danger);
+    --modes-grid: var(--grid-line);
 
     min-height: 100vh;
-    background-color: var(--modes-bg);
+    background: var(--modes-bg);
     color: var(--modes-text);
     font-family: inherit;
 }
@@ -27,12 +36,12 @@
 
     background-image:
         linear-gradient(
-            rgba(167, 139, 250, 0.045) 1px,
+            var(--modes-grid) 1px,
             transparent 1px
         ),
         linear-gradient(
             90deg,
-            rgba(167, 139, 250, 0.045) 1px,
+            var(--modes-grid) 1px,
             transparent 1px
         );
 
@@ -54,7 +63,7 @@
     gap: 28px;
 
     background: var(--modes-header);
-    border-bottom: 1px solid rgba(167, 139, 250, 0.13);
+    border-bottom: 1px solid var(--line-light);
 }
 
 /* Brand */
@@ -79,8 +88,8 @@
     border: 1px solid var(--modes-border);
     border-radius: 13px;
 
-    background: #1c1230;
-    color: #ff9b45;
+    background: var(--modes-card);
+    color: var(--modes-accent);
 
     font-size: 27px;
     font-weight: 800;
@@ -102,7 +111,7 @@
     font-size: 9px;
     font-weight: 700;
     letter-spacing: 2.2px;
-    color: var(--modes-purple);
+    color: var(--modes-accent);
 }
 
 /* Navigation */
@@ -131,12 +140,12 @@
 
 .modes-nav a:hover {
     color: var(--modes-text);
-    background: rgba(189, 121, 255, 0.08);
+    background: var(--modes-card-hover);
 }
 
 .modes-nav a.active {
-    background: #35214f;
-    color: var(--modes-purple);
+    background: var(--modes-card-hover);
+    color: var(--modes-accent);
 }
 
 /* Header buttons */
@@ -159,7 +168,7 @@
     border: 1px solid var(--modes-border);
     border-radius: 10px;
 
-    background: #1b1230;
+    background: var(--modes-card);
     color: var(--modes-text);
 
     text-decoration: none;
@@ -182,8 +191,8 @@
 
 .modes-help-btn:hover,
 .modes-settings-btn:hover {
-    background: #302047;
-    border-color: var(--modes-purple);
+    background: var(--modes-card-hover);
+    border-color: var(--modes-accent);
 }
 
 /* Main layout */
@@ -215,7 +224,7 @@
 .modes-eyebrow {
     margin: 0 0 18px;
 
-    color: var(--modes-purple);
+    color: var(--modes-accent);
 
     font-size: 11px;
     font-weight: 800;
@@ -232,7 +241,7 @@
 }
 
 .modes-hero h1 span {
-    color: var(--modes-purple);
+    color: var(--modes-accent);
 }
 
 .modes-description {
@@ -258,7 +267,7 @@
     border: 1px solid var(--modes-border);
     border-radius: 10px;
 
-    background: #1b1230;
+    background: var(--modes-card);
     color: var(--modes-text);
 
     text-decoration: none;
@@ -273,8 +282,8 @@
 }
 
 .modes-view-all:hover {
-    background: #302047;
-    border-color: var(--modes-purple);
+    background: var(--modes-card-hover);
+    border-color: var(--modes-accent);
 }
 
 /* Mode grid */
@@ -321,12 +330,12 @@
 .mode-card:hover {
     transform: translateY(-3px);
     background: var(--modes-card-hover);
-    border-color: #7850a4;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
+    border-color: var(--modes-accent);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
 .mode-card:focus-visible {
-    outline: 2px solid var(--modes-purple);
+    outline: 2px solid var(--modes-accent);
     outline-offset: 4px;
 }
 
@@ -366,23 +375,23 @@
     flex-shrink: 0;
 
     border-radius: 14px;
-    background: rgba(145, 120, 200, 0.12);
+    background: var(--modes-card-hover);
 }
 
 .mode-icon-calm {
-    color: #38bdf8;
+    color: var(--modes-accent);
 }
 
 .mode-icon-congestion {
-    color: #fbbf24;
+    color: var(--modes-secondary);
 }
 
 .mode-icon-disaster {
-    color: #fb7185;
+    color: var(--modes-danger);
 }
 
 .mode-icon-race {
-    color: #c4b5fd;
+    color: var(--modes-accent);
 }
 
 .mode-icon svg {
@@ -405,16 +414,16 @@
 }
 
 .mode-status-live {
-    color: #e879ff;
-    border-color: #59366f;
+    color: var(--modes-secondary);
+    border-color: var(--modes-secondary);
 }
 
 .mode-status-soon {
-    color: #9d91b1;
-    border-color: #49375e;
+    color: var(--modes-muted);
+    border-color: var(--modes-border);
 }
 
-/* Coming soon card appearance */
+/* Coming soon cards */
 
 .mode-unavailable {
     appearance: none;
@@ -441,13 +450,7 @@
     border: 1px solid var(--modes-border);
     border-radius: 20px;
 
-    background:
-        radial-gradient(
-            ellipse at 95% 0%,
-            rgba(95, 75, 170, 0.16),
-            transparent 50%
-        ),
-        linear-gradient(115deg, #1c1230, #1b1634);
+    background: var(--panel-gradient);
 }
 
 .modes-bottom-content {
@@ -467,7 +470,7 @@
 }
 
 .modes-bottom h2 span {
-    color: var(--modes-purple);
+    color: var(--modes-accent);
 }
 
 .modes-bottom-content > p:not(.modes-eyebrow) {
@@ -487,10 +490,10 @@
     justify-content: center;
     gap: 12px;
 
-    border: 1px solid #9562c4;
+    border: 1px solid var(--modes-accent);
     border-radius: 10px;
 
-    background: #392151;
+    background: var(--modes-card-hover);
     color: var(--modes-text);
 
     text-decoration: none;
@@ -501,7 +504,7 @@
 }
 
 .modes-start-btn:hover {
-    background: #4b2b6c;
+    background: var(--modes-card);
 }
 
 /* Footer */
@@ -514,7 +517,7 @@
     justify-content: space-between;
     gap: 16px;
 
-    color: #847895;
+    color: var(--modes-muted);
     font-size: 11px;
 }
 
@@ -535,7 +538,7 @@
     border: 1px solid var(--modes-border);
     border-radius: 12px;
 
-    background: #241735;
+    background: var(--modes-card);
     color: var(--modes-text);
 
     font-size: 13px;
@@ -678,11 +681,8 @@
         font-size: 10px;
     }
 
-    .modes-card {
-        gap: 10px;
-    }
-
     .mode-card {
         padding: 17px 12px;
+        gap: 10px;
     }
 }
