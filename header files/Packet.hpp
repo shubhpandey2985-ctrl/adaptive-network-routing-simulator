@@ -1,17 +1,13 @@
-#ifndef PACKET_H
-#define PACKET_H
+#ifndef PACKET_HPP
+#define PACKET_HPP
 
 #include <vector>
-
 using namespace std;
 
-class Packet
-{
+class Packet {
 private:
-    int id;
-    int source;
-    int destination;
-    int priority;
+    int id, source, destination, priority;
+    bool delivered;
     vector<int> route;
 
 public:
@@ -22,11 +18,11 @@ public:
     int getSource() const;
     int getDestination() const;
     int getPriority() const;
+    bool isDelivered() const;
 
-    void setRoute(const vector<int>& newRoute);
+    void setDelivered(bool status);
+    void setRoute(const vector<int>& path);
     vector<int> getRoute() const;
-
-    void display() const;
 };
 
 #endif
