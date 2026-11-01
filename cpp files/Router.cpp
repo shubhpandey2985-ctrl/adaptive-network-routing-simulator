@@ -1,79 +1,60 @@
-#include <iostream>
-#include "Router.h"
+#include "Router.hpp"
 
-using namespace std;
-
-Router::Router()
-{
-    id = 0;
-    name = "Unknown";
-    active = true;
-}
+Router::Router() : id(0), name(""), active(true) {}
 
 Router::Router(int id, string name)
-{
-    this->id = id;
-    this->name = name;
-    active = true;
-}
+    : id(id), name(name), active(true) {}
 
-int Router::getId() const
-{
-    return id;
-}
+int Router::getId() const { return id; }
+string Router::getName() const { return name; }
+bool Router::isActive() const { return active; }
 
-string Router::getName() const
-{
-    return name;
-}
-
-bool Router::isActive() const
-{
-    return active;
-}
-
-void Router::setActive(bool status)
-{
+void Router::setActive(bool status) {
     active = status;
 }
 
-bool Router::addPacket(Packet* packet)
-{
-    if (!active)
+void Router::addPacket(const Packet& packet) {
+    packetQueue.push(packet);
+}
+
+bool Router::removePacket(Packet& packet) {
+    if (packetQueue.empty())
         return false;
 
-    packetQueue.push(packet);
+    packet = packetQueue.front();
+    packetQueue.pop();
     return true;
 }
 
-Packet* Router::removePacket()
-{
-    if (packetQueue.empty())
-        return nullptr;
-
-    Packet* packet = packetQueue.front();
-    packetQueue.pop();
-
-    return packet;
-}
-
-int Router::getQueueSize() const
-{
+int Router::getQueueSize() const {
     return static_cast<int>(packetQueue.size());
 }
 
-void Router::display() const
-{
-    cout << "Router ID: " << id
-         << " | Name: " << name
-         << " | Status: ";
+vector<Packet> Router::getQueuedPackets() const {
+    queue<Packet> temp = packetQueue;
+    vector<Packet> result;
 
-    if (active)
-        cout << "ACTIVE";
-    else
-        cout << "FAILED";
+    while (!temp.empty()) {
+        result.push_back(temp.front());
+        temp.pop();
+    }
 
-    cout << " | Packets in Queue: "
-         << packetQueue.size()
-         << endl;
+    return result;
+}
+
+vector<Packet> Router::drainPackets() {
+    vector<Packet> result;
+    Packet packet;
+
+    while (removePacket(packet))
+        result.push_back(packet);
+
+    return result;
+}
+
+void Router::display() const {
+    cout << "Router " << id << " (" << name << ") - "
+         << (active ? "Active" : "Failed")
+         << " - Queued packets: " << packetQueue.size()
+         << '\n';
 }
