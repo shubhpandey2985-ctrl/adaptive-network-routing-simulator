@@ -1,553 +1,271 @@
-#include <iostream>
+#include "Network.hpp"
 #include <queue>
-#include <stack>
-#include <map>
-#include <limits>
-#include <algorithm>
+#include <set>
 
-#include "Network.h"
-
-using namespace std;
-
-void Network::addRouter(int id, const string& name)
-{
-    if (findRouter(id) != nullptr)
-        return;
-
-    routers.push_back(Router(id, name));
-    graph[id] = vector<pair<int, int>>();
+Network::Network() {
+    initializeDefaultNetwork();
 }
 
-void Network::addLink(int router1, int router2, int cost)
-{
-    validateRouter(router1);
-    validateRouter(router2);
+void Network::initializeDefaultNetwork() {
+    routers.clear();
+    links.clear();
 
-    if (router1 == router2)
-        return;
+    for (int i = 1; i <= 8; i++)
+        routers.emplace_back(i, "R" + to_string(i));
 
-    if (findLink(router1, router2) != nullptr)
-        return;
+    int data[12][3] = {
+        {1,2,2}, {1,3,5}, {2,3,1}, {2,4,3},
+        {3,5,2}, {4,5,2}, {4,6,4}, {5,6,1},
+        {5,7,3}, {6,8,2}, {7,8,1}, {3,7,5}
+    };
 
-    if (cost <= 0)
-        cost = 1;
+    for (auto& edge : data)
+        links.emplace_back(edge[0], edge[1], edge[2]);
 
-    links.push_back(Link(router1, router2, cost));
-
-    graph[router1].push_back({router2, cost});
-    graph[router2].push_back({router1, cost});
+    rebuildGraph();
 }
 
-Router* Network::findRouter(int id)
-{
-    for (Router& router : routers)
-    {
+void Network::rebuildGraph() {
+    graph.clear();
+
+    for (const auto& router : routers)
+        graph[router.getId()] = {};
+
+    for (const auto& link : links) {
+        if (!link.isActive())
+            continue;
+
+        const Router* a = findRouter(link.getSource());
+        const Router* b = findRouter(link.getDestination());
+
+        if (a && b && a->isActive() && b->isActive()) {
+            graph[link.getSource()].push_back(
+                {link.getDestination(), link.getCost()});
+
+            graph[link.getDestination()].push_back(
+                {link.getSource(), link.getCost()});
+        }
+    }
+}
+
+Router* Network::findRouter(int id) {
+    for (auto& router : routers)
         if (router.getId() == id)
             return &router;
-    }
 
     return nullptr;
 }
 
-Link* Network::findLink(int router1, int router2)
-{
-    for (Link& link : links)
-    {
-        if ((link.getRouter1() == router1 &&
-             link.getRouter2() == router2) ||
-            (link.getRouter1() == router2 &&
-             link.getRouter2() == router1))
-        {
-            return &link;
+const Router* Network::findRouter(int id) const {
+    for (const auto& router : routers)
+        if (router.getId() == id)
+            return &router;
+
+    return nullptr;
+}
+
+void Network::displayNetwork() const {
+    cout << "\n========== NETWORK ==========\n";
+
+    for (const auto& router : routers)
+        router.display();
+
+    cout << "\nLinks:\n";
+
+    for (const auto& link : links) {
+        cout << link.getSource() << " <-> "
+             << link.getDestination()
+             << " | Cost: " << link.getCost()
+             << " | " << (link.isActive() ? "Active" : "Failed")
+             << '\n';
+    }
+}
+
+void Network::failRouter(int id) {
+    Router* router = findRouter(id);
+    if (!router) throw RouterNotFoundException();
+
+    router->setActive(false);
+    rebuildGraph();
+}
+
+void Network::repairRouter(int id) {
+    Router* router = findRouter(id);
+    if (!router) throw RouterNotFoundException();
+
+    router->setActive(true);
+    rebuildGraph();
+}
+
+void Network::failLink(int source, int destination) {
+    for (auto& link : links) {
+        if ((link.getSource() == source &&
+             link.getDestination() == destination) ||
+            (link.getSource() == destination &&
+             link.getDestination() == source)) {
+            link.setActive(false);
+            rebuildGraph();
+            return;
         }
     }
 
-    return nullptr;
+    throw LinkNotFoundException();
 }
 
-void Network::validateRouter(int id)
-{
-    if (findRouter(id) == nullptr)
+void Network::repairLink(int source, int destination) {
+    for (auto& link : links) {
+        if ((link.getSource() == source &&
+             link.getDestination() == destination) ||
+            (link.getSource() == destination &&
+             link.getDestination() == source)) {
+            link.setActive(true);
+            rebuildGraph();
+            return;
+        }
+    }
+
+    throw LinkNotFoundException();
+}
+
+vector<pair<int, int>> Network::getNeighbors(int id) const {
+    auto it = graph.find(id);
+    if (it == graph.end())
         throw RouterNotFoundException();
+
+    return it->second;
 }
 
-void Network::validateLink(int router1, int router2)
-{
-    validateRouter(router1);
-    validateRouter(router2);
-
-    if (findLink(router1, router2) == nullptr)
-        throw LinkNotFoundException();
+bool Network::isRouterActive(int id) const {
+    const Router* router = findRouter(id);
+    return router && router->isActive();
 }
 
-vector<int> Network::BFS(int source, int destination)
-{
-    validateRouter(source);
-    validateRouter(destination);
-
-    Router* sourceRouter = findRouter(source);
-    Router* destinationRouter = findRouter(destination);
-
-    if (!sourceRouter->isActive() ||
-        !destinationRouter->isActive())
-    {
-        throw DestinationUnreachableException();
-    }
-
-    queue<int> q;
-
-    map<int, bool> visited;
-    map<int, int> parent;
-
-    for (const Router& router : routers)
-    {
-        visited[router.getId()] = false;
-        parent[router.getId()] = -1;
-    }
-
-    q.push(source);
-    visited[source] = true;
-
-    while (!q.empty())
-    {
-        int current = q.front();
-        q.pop();
-
-        if (current == destination)
-            break;
-
-        for (const auto& neighbor : graph[current])
-        {
-            int nextRouter = neighbor.first;
-
-            Link* link = findLink(current, nextRouter);
-            Router* router = findRouter(nextRouter);
-
-            if (link == nullptr ||
-                router == nullptr ||
-                !link->isActive() ||
-                !router->isActive())
-            {
-                continue;
-            }
-
-            if (!visited[nextRouter])
-            {
-                visited[nextRouter] = true;
-                parent[nextRouter] = current;
-                q.push(nextRouter);
-            }
-        }
-    }
-
-    if (!visited[destination])
-        throw DestinationUnreachableException();
-
-    vector<int> path;
-
-    int current = destination;
-
-    while (current != -1)
-    {
-        path.push_back(current);
-        current = parent[current];
-    }
-
-    reverse(path.begin(), path.end());
-
-    return path;
-}
-
-vector<int> Network::DFS(int source, int destination)
-{
-    validateRouter(source);
-    validateRouter(destination);
-
-    Router* sourceRouter = findRouter(source);
-    Router* destinationRouter = findRouter(destination);
-
-    if (!sourceRouter->isActive() ||
-        !destinationRouter->isActive())
-    {
-        throw DestinationUnreachableException();
-    }
-
-    stack<int> s;
-
-    map<int, bool> visited;
-    map<int, int> parent;
-
-    for (const Router& router : routers)
-    {
-        visited[router.getId()] = false;
-        parent[router.getId()] = -1;
-    }
-
-    s.push(source);
-    visited[source] = true;
-
-    while (!s.empty())
-    {
-        int current = s.top();
-        s.pop();
-
-        if (current == destination)
-            break;
-
-        for (auto it = graph[current].rbegin();
-             it != graph[current].rend();
-             ++it)
-        {
-            int nextRouter = it->first;
-
-            Link* link = findLink(current, nextRouter);
-            Router* router = findRouter(nextRouter);
-
-            if (link == nullptr ||
-                router == nullptr ||
-                !link->isActive() ||
-                !router->isActive())
-            {
-                continue;
-            }
-
-            if (!visited[nextRouter])
-            {
-                visited[nextRouter] = true;
-                parent[nextRouter] = current;
-                s.push(nextRouter);
-            }
-        }
-    }
-
-    if (!visited[destination])
-        throw DestinationUnreachableException();
-
-    vector<int> path;
-
-    int current = destination;
-
-    while (current != -1)
-    {
-        path.push_back(current);
-        current = parent[current];
-    }
-
-    reverse(path.begin(), path.end());
-
-    return path;
-}
-
-vector<int> Network::Dijkstra(int source, int destination)
-{
-    validateRouter(source);
-    validateRouter(destination);
-
-    Router* sourceRouter = findRouter(source);
-    Router* destinationRouter = findRouter(destination);
-
-    if (!sourceRouter->isActive() ||
-        !destinationRouter->isActive())
-    {
-        throw DestinationUnreachableException();
-    }
-
-    const int INF = numeric_limits<int>::max();
-
-    map<int, int> distance;
-    map<int, int> parent;
-    map<int, bool> visited;
-
-    for (const Router& router : routers)
-    {
-        int id = router.getId();
-
-        distance[id] = INF;
-        parent[id] = -1;
-        visited[id] = false;
-    }
-
-    distance[source] = 0;
-
-    for (size_t count = 0; count < routers.size(); count++)
-    {
-        int current = -1;
-        int bestDistance = INF;
-
-        for (const Router& router : routers)
-        {
-            int id = router.getId();
-
-            if (!visited[id] &&
-                router.isActive() &&
-                distance[id] < bestDistance)
-            {
-                bestDistance = distance[id];
-                current = id;
-            }
-        }
-
-        if (current == -1)
-            break;
-
-        visited[current] = true;
-
-        for (const auto& neighbor : graph[current])
-        {
-            int nextRouter = neighbor.first;
-            int cost = neighbor.second;
-
-            Link* link = findLink(current, nextRouter);
-            Router* router = findRouter(nextRouter);
-
-            if (link == nullptr ||
-                router == nullptr ||
-                !link->isActive() ||
-                !router->isActive())
-            {
-                continue;
-            }
-
-            if (distance[current] != INF &&
-                distance[current] + cost < distance[nextRouter])
-            {
-                distance[nextRouter] =
-                    distance[current] + cost;
-
-                parent[nextRouter] = current;
-            }
-        }
-    }
-
-    if (distance[destination] == INF)
-        throw DestinationUnreachableException();
-
-    vector<int> path;
-
-    int current = destination;
-
-    while (current != -1)
-    {
-        path.push_back(current);
-        current = parent[current];
-    }
-
-    reverse(path.begin(), path.end());
-
-    return path;
-}
-
-bool Network::isConnected()
-{
-    int start = -1;
-
-    for (const Router& router : routers)
-    {
-        if (router.isActive())
-        {
-            start = router.getId();
-            break;
-        }
-    }
-
-    if (start == -1)
+bool Network::isConnected(int source, int destination) const {
+    if (!isRouterActive(source) || !isRouterActive(destination))
         return false;
 
     queue<int> q;
-    map<int, bool> visited;
+    set<int> visited;
 
-    for (const Router& router : routers)
-    {
-        visited[router.getId()] = false;
-    }
+    q.push(source);
+    visited.insert(source);
 
-    q.push(start);
-    visited[start] = true;
-
-    while (!q.empty())
-    {
+    while (!q.empty()) {
         int current = q.front();
         q.pop();
 
-        for (const auto& neighbor : graph[current])
-        {
-            int nextRouter = neighbor.first;
+        if (current == destination)
+            return true;
 
-            Link* link = findLink(current, nextRouter);
-            Router* router = findRouter(nextRouter);
-
-            if (link == nullptr ||
-                router == nullptr ||
-                !link->isActive() ||
-                !router->isActive())
-            {
-                continue;
-            }
-
-            if (!visited[nextRouter])
-            {
-                visited[nextRouter] = true;
-                q.push(nextRouter);
+        for (auto neighbor : getNeighbors(current)) {
+            if (!visited.count(neighbor.first)) {
+                visited.insert(neighbor.first);
+                q.push(neighbor.first);
             }
         }
     }
 
-    for (const Router& router : routers)
-    {
-        if (router.isActive() &&
-            !visited[router.getId()])
-        {
-            return false;
-        }
+    return false;
+}
+
+void Network::queuePacket(int routerId, const Packet& packet) {
+    Router* router = findRouter(routerId);
+    if (!router) throw RouterNotFoundException();
+
+    router->addPacket(packet);
+}
+
+vector<Packet> Network::getPendingPackets() const {
+    vector<Packet> result;
+
+    for (const auto& router : routers) {
+        auto packets = router.getQueuedPackets();
+
+        for (const auto& packet : packets)
+            result.push_back(packet);
     }
 
-    return true;
+    return result;
 }
 
-void Network::failRouter(int id)
-{
-    validateRouter(id);
+vector<Packet> Network::collectPendingPackets() {
+    vector<Packet> result;
 
-    Router* router = findRouter(id);
-    router->setActive(false);
-}
+    for (auto& router : routers) {
+        auto packets = router.drainPackets();
 
-void Network::repairRouter(int id)
-{
-    validateRouter(id);
-
-    Router* router = findRouter(id);
-    router->setActive(true);
-}
-
-void Network::failLink(int router1, int router2)
-{
-    validateLink(router1, router2);
-
-    Link* link = findLink(router1, router2);
-    link->fail();
-}
-
-void Network::repairLink(int router1, int router2)
-{
-    validateLink(router1, router2);
-
-    Link* link = findLink(router1, router2);
-    link->repair();
-}
-
-void Network::displayNetwork()
-{
-    cout << "\n============================================\n";
-    cout << "              ROUTERS\n";
-    cout << "============================================\n";
-
-    for (const Router& router : routers)
-    {
-        router.display();
+        for (const auto& packet : packets)
+            result.push_back(packet);
     }
 
-    cout << "\n============================================\n";
-    cout << "               LINKS\n";
-    cout << "============================================\n";
-
-    for (const Link& link : links)
-    {
-        link.display();
-    }
+    return result;
 }
 
-void Network::saveNetworkToFile(ostream& out)
-{
-    out << "ROUTERS\n";
-    out << routers.size() << "\n";
+void Network::saveNetwork(ostream& out) const {
+    out << routers.size() << '\n';
 
-    for (const Router& router : routers)
-    {
-        out << router.getId() << " "
-            << router.getName() << " "
-            << router.isActive() << "\n";
-    }
+    for (const auto& router : routers)
+        out << router.getId() << ' '
+            << router.getName() << ' '
+            << router.isActive() << '\n';
 
-    out << "LINKS\n";
-    out << links.size() << "\n";
+    out << links.size() << '\n';
 
-    for (const Link& link : links)
-    {
-        out << link.getRouter1() << " "
-            << link.getRouter2() << " "
-            << link.getCost() << " "
-            << link.isActive() << "\n";
-    }
+    for (const auto& link : links)
+        out << link.getSource() << ' '
+            << link.getDestination() << ' '
+            << link.getCost() << ' '
+            << link.isActive() << '\n';
 }
 
-void Network::loadNetworkFromFile(istream& in)
-{
-    routers.clear();
-    links.clear();
-    graph.clear();
+void Network::loadNetwork(istream& in) {
+    vector<Router> newRouters;
+    vector<Link> newLinks;
 
-    string section;
-    int routerCount;
-    int linkCount;
+    int routerCount, linkCount;
 
-    in >> section;
+    if (!(in >> routerCount) || routerCount < 1 || routerCount > 1000)
+        throw runtime_error("Invalid router data in save file.");
 
-    if (!in || section != "ROUTERS")
-    {
-        throw NetworkException(
-            "Invalid network file format."
-        );
-    }
-
-    in >> routerCount;
-
-    for (int i = 0; i < routerCount; i++)
-    {
-        int id;
+    for (int i = 0; i < routerCount; i++) {
+        int id, active;
         string name;
-        bool active;
 
-        in >> id >> name >> active;
+        if (!(in >> id >> name >> active) ||
+            id <= 0 || (active != 0 && active != 1))
+            throw runtime_error("Invalid router entry.");
 
-        addRouter(id, name);
-
-        Router* router = findRouter(id);
-
-        if (router != nullptr)
-            router->setActive(active);
+        Router router(id, name);
+        router.setActive(active != 0);
+        newRouters.push_back(router);
     }
 
-    in >> section;
+    if (!(in >> linkCount) || linkCount < 0 || linkCount > 10000)
+        throw runtime_error("Invalid link data in save file.");
 
-    if (!in || section != "LINKS")
-    {
-        throw NetworkException(
-            "Invalid network file format."
-        );
-    }
+    for (int i = 0; i < linkCount; i++) {
+        int a, b, cost, active;
 
-    in >> linkCount;
+        if (!(in >> a >> b >> cost >> active) ||
+            a == b || cost <= 0 || (active != 0 && active != 1))
+            throw runtime_error("Invalid link entry.");
 
-    for (int i = 0; i < linkCount; i++)
-    {
-        int router1;
-        int router2;
-        int cost;
-        bool active;
+        bool foundA = false, foundB = false;
 
-        in >> router1 >> router2 >> cost >> active;
-
-        addLink(router1, router2, cost);
-
-        Link* link = findLink(router1, router2);
-
-        if (link != nullptr)
-        {
-            if (active)
-                link->repair();
-            else
-                link->fail();
+        for (const auto& r : newRouters) {
+            if (r.getId() == a) foundA = true;
+            if (r.getId() == b) foundB = true;
         }
+
+        if (!foundA || !foundB)
+            throw runtime_error("Link refers to an unknown router.");
+
+        Link link(a, b, cost);
+        link.setActive(active != 0);
+        newLinks.push_back(link);
     }
+
+    routers = newRouters;
+    links = newLinks;
+    rebuildGraph();
 }
