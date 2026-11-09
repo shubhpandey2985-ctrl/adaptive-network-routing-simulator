@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\SHUBH PANDEY\OneDrive\Desktop\Real_Project\adaptive-network-routing-simulator\Backend\src\server_main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\SHUBH PANDEY\OneDrive\Desktop\Real_Project\adaptive-network-routing-simulator\Backend\src\api\ApiServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\SHUBH PANDEY\OneDrive\Desktop\Real_Project\adaptive-network-routing-simulator\Backend\src\core\Link.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\SHUBH PANDEY\OneDrive\Desktop\Real_Project\adaptive-network-routing-simulator\Backend\src\core\Network.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\SHUBH PANDEY\OneDrive\Desktop\Real_Project\adaptive-network-routing-simulator\Backend\src\core\Packet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\SHUBH PANDEY\OneDrive\Desktop\Real_Project\adaptive-network-routing-simulator\Backend\src\core\Router.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\SHUBH PANDEY\OneDrive\Desktop\Real_Project\adaptive-network-routing-simulator\Backend\src\core\RoutingStrategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\SHUBH PANDEY\OneDrive\Desktop\Real_Project\adaptive-network-routing-simulator\Backend\src\services\SimulationManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\SHUBH PANDEY\OneDrive\Desktop\Real_Project\adaptive-network-routing-simulator\Backend\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="C:\dev\vcpkg\installed\x64-windows\share\nlohmann_json\nlohmann_json.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{9235A9EF-674B-3D1A-9F5A-6305DEB27672}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

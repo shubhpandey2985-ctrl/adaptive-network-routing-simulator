@@ -1,0 +1,47 @@
+# CMake generation dependency list for this directory.
+C:/Program Files/CMake/share/cmake-4.5/Modules/CMakeCXXInformation.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/CMakeCommonLanguageInclude.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/CMakeDependentOption.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/CMakeFindDependencyMacro.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/CMakeGenericSystem.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/CMakeInitializeConfigs.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/CMakeLanguageInformation.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/CMakeRCInformation.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/CMakeSystemSpecificInformation.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/CMakeSystemSpecificInitialize.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/CheckCXXSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/CheckIncludeFileCXX.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/CheckLibraryExists.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/Compiler/CMakeCommonCompilerMacros.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/Compiler/MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/Compiler/MSVC.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/FindPackageHandleStandardArgs.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/FindPackageMessage.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/FindThreads.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/Internal/CMakeCXXLinkerInformation.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/Internal/CMakeCommonLinkerInformation.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/Internal/CheckCommon.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/Internal/CheckSourceCompiles.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/Linker/MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/Linker/MSVC.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/Platform/Linker/Windows-MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/Platform/Linker/Windows-MSVC.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/Platform/Windows-Initialize.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/Platform/Windows-MSVC-CXX.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/Platform/Windows-MSVC.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/Platform/Windows.cmake
+C:/Program Files/CMake/share/cmake-4.5/Modules/Platform/WindowsPaths.cmake
+C:/Users/SHUBH PANDEY/OneDrive/Desktop/Real_Project/adaptive-network-routing-simulator/Backend/CMakeLists.txt
+C:/Users/SHUBH PANDEY/OneDrive/Desktop/Real_Project/adaptive-network-routing-simulator/Backend/build/CMakeFiles/4.5.0-rc3/CMakeCXXCompiler.cmake
+C:/Users/SHUBH PANDEY/OneDrive/Desktop/Real_Project/adaptive-network-routing-simulator/Backend/build/CMakeFiles/4.5.0-rc3/CMakeRCCompiler.cmake
+C:/Users/SHUBH PANDEY/OneDrive/Desktop/Real_Project/adaptive-network-routing-simulator/Backend/build/CMakeFiles/4.5.0-rc3/CMakeSystem.cmake
+C:/dev/vcpkg/installed/x64-windows/share/httplib/httplibConfig.cmake
+C:/dev/vcpkg/installed/x64-windows/share/httplib/httplibConfigVersion.cmake
+C:/dev/vcpkg/installed/x64-windows/share/httplib/httplibTargets.cmake
+C:/dev/vcpkg/installed/x64-windows/share/nlohmann_json/nlohmann_jsonConfig.cmake
+C:/dev/vcpkg/installed/x64-windows/share/nlohmann_json/nlohmann_jsonConfigVersion.cmake
+C:/dev/vcpkg/installed/x64-windows/share/nlohmann_json/nlohmann_jsonTargets.cmake
+C:/dev/vcpkg/installed/x64-windows/share/unofficial-brotli/unofficial-brotli-config-debug.cmake
+C:/dev/vcpkg/installed/x64-windows/share/unofficial-brotli/unofficial-brotli-config-release.cmake
+C:/dev/vcpkg/installed/x64-windows/share/unofficial-brotli/unofficial-brotli-config.cmake
+C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake
