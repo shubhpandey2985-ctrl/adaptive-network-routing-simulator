@@ -55,6 +55,5 @@
   "C_Cpp_Runner.useLeakSanitizer": false,
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
-  "C_Cpp_Runner.msvcSecureNoWarnings": false,
-  "cmake.sourceDirectory": "C:/Users/SHUBH PANDEY/OneDrive/Desktop/Real_Project/adaptive-network-routing-simulator/Backend"
+  "C_Cpp_Runner.msvcSecureNoWarnings": false
 }

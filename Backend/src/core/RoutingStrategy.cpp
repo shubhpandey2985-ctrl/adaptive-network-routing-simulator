@@ -198,6 +198,9 @@ string AdaptiveStrategy::getName() const {
     return "Adaptive";
 }
 
+// This strategy only compares the existing BFS and Dijkstra candidates.
+// It scores each as total link cost + 0.25 per hop and picks the lower score
+// (BFS wins ties). It has no traffic, queue, latency, or congestion model.
 vector<int> AdaptiveStrategy::findRoute(
     const Network& network, int source, int destination) {
 

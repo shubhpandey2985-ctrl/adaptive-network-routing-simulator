@@ -96,8 +96,13 @@ void configureRoutes(httplib::Server& server) {
         for(const auto& p:s->network.getPendingPackets())pending.push_back({{"id",p.getId()},{"source",p.getSource()},{"destination",p.getDestination()},{"priority",p.getPriority()}});
         send(r,200,{{"pendingPackets",pending}});
     }catch(const std::out_of_range& e){send(r,404,{{"error",e.what()}});}});
+    server.Get(R"(/api/v1/simulations/([A-Za-z0-9_-]+)/packets)",[](const httplib::Request& q,httplib::Response& r){try{
+        auto s=manager.find(q.matches[1]);std::lock_guard<std::mutex> g(manager.stateMutex());
+        send(r,200,{{"packets",s->packets},{"count",s->packets.size()}});
+    }catch(const std::out_of_range& e){send(r,404,{{"error",e.what()}});}});
     server.Post(R"(/api/v1/simulations/([A-Za-z0-9_-]+)/packets/process)",[](const httplib::Request& q,httplib::Response& r){try{
         auto b=q.body.empty()?json::object():body(q);auto algorithm=stringValue(b,"algorithm","Dijkstra");
+        makeStrategy(algorithm);
         auto s=manager.find(q.matches[1]);std::lock_guard<std::mutex> g(manager.stateMutex());auto pending=s->network.collectPendingPackets();json processed=json::array();
         for(auto& p:pending){auto it=std::find_if(s->packets.begin(),s->packets.end(),[&](const json& x){return x.value("id",-1)==p.getId();});
             try{auto result=route(s->network,p.getSource(),p.getDestination(),algorithm);p.setRoute(result["route"].get<std::vector<int>>());p.setDelivered(true);++s->delivered;
