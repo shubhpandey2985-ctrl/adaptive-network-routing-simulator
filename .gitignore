@@ -1,2 +1,19 @@
 .vscode
 .gitkeep
+
+# CMake and compiler outputs
+/Backend/build/
+/simulator.exe
+**/build/
+cmake-build*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.obj
+*.pdb
+*.ilk
+*.idb
+*.tlog/
+*.recipe
+*.vcxproj.user
