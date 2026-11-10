@@ -1042,6 +1042,14 @@ select:disabled {
     font-weight: 800;
 }
 
+.comparison-row.unreachable {
+    border-color: rgba(244, 63, 94, 0.4);
+}
+
+.comparison-row .comparison-cost.unreachable {
+    color: var(--lab-red);
+}
+
 .comparison-row p {
     margin: 0;
 

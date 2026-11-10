@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/lab.css">
 
     <script src="js/common.js" defer></script>
+    <script src="js/api.js" defer></script>
     <script src="js/lab.js" defer></script>
 </head>
 
@@ -91,9 +92,23 @@
                 <div class="control-group">
                     <label for="topologySelect">Network topology</label>
                     <select id="topologySelect">
-                        <option value="6">Small Network — 6 Routers</option>
-                        <option value="7">Medium Network — 7 Routers</option>
-                        <option value="8" selected>Default Network — 8 Routers</option>
+                        <option value="4">4 Routers</option>
+                        <option value="5">5 Routers</option>
+                        <option value="6">6 Routers</option>
+                        <option value="7">7 Routers</option>
+                        <option value="8" selected>8 Routers</option>
+                        <option value="9">9 Routers</option>
+                        <option value="10">10 Routers</option>
+                        <option value="11">11 Routers</option>
+                        <option value="12">12 Routers</option>
+                        <option value="13">13 Routers</option>
+                        <option value="14">14 Routers</option>
+                        <option value="15">15 Routers</option>
+                        <option value="16">16 Routers</option>
+                        <option value="17">17 Routers</option>
+                        <option value="18">18 Routers</option>
+                        <option value="19">19 Routers</option>
+                        <option value="20">20 Routers</option>
                     </select>
                 </div>
 
@@ -102,7 +117,8 @@
                     <select id="algorithmSelect">
                         <option value="dijkstra">Dijkstra — Shortest Path</option>
                         <option value="bfs">BFS — Breadth-First Search</option>
-                        <option value="adaptive">Adaptive Routing — Demo</option>
+                        <option value="dfs">DFS — Depth-First Search</option>
+                        <option value="adaptive">Adaptive — Cost and hop score</option>
                     </select>
                     <p class="field-hint">
                         Choose how the demo calculates a route.
@@ -190,9 +206,7 @@
                 </button>
 
                 <p class="demo-notice">
-                    This is a Phase 2 frontend demonstration. The routing
-                    simulation runs in JavaScript and is not connected to
-                    the C++ backend or a database yet.
+                    Routing decisions and failure controls use the C++ backend.
                 </p>
             </aside>
 

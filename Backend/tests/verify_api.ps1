@@ -247,4 +247,105 @@ Assert-Equal "reset restores every link" @($afterReset.topology.links | Where-Ob
 $resetPending = Invoke-RestMethod "$BaseUrl/simulations/$idA/packets/pending"
 Assert-Equal "reset clears pending queue" $resetPending.pendingPackets.Count 0
 
+# --- Full 4 through 20 router testing matrix ---
+4..20 | ForEach-Object {
+    $count = $_
+    $session = Post-Json "/simulations" (@{routerCount=$count} | ConvertTo-Json)
+    $simId = $session.id
+    Assert-Equal "session $count routerCount" $session.topology.routerCount $count
+
+    foreach ($alg in @("BFS", "DFS", "Dijkstra", "Adaptive")) {
+        $rt = Post-Json "/simulations/$simId/route" (@{source=1;destination=$count;algorithm=$alg} | ConvertTo-Json)
+        Assert-Equal "matrix $count $alg reachable" $rt.reachable $true
+        Assert-Equal "matrix $count $alg start" $rt.route[0] 1
+        Assert-Equal "matrix $count $alg end" $rt.route[-1] $count
+        Assert-Equal "matrix $count $alg active links" (Test-RouteEdges $rt $session.topology.links) $true
+
+        # Verify all routers in the route belong to active topology (1..count)
+        foreach ($node in $rt.route) {
+            if ($node -lt 1 -or $node -gt $count) {
+                throw "Route contains router $node outside active topology 1..$count."
+            }
+        }
+        $script:Passed++
+        Write-Host "PASS matrix count $count $alg verified"
+    }
+
+    # Packet creation and processing for topology count $_
+    $pkt = Post-Json "/simulations/$simId/packets" (@{source=1;destination=$count;priority=5;count=1} | ConvertTo-Json)
+    Assert-Equal "matrix $count packet pending" $pkt.pendingPackets 1
+    Assert-Equal "matrix $count packet metric total" $pkt.metrics.totalPackets 1
+
+    $pendingList = Invoke-RestMethod "$BaseUrl/simulations/$simId/packets/pending"
+    Assert-Equal "matrix $count pending retrieval" $pendingList.pendingPackets.Count 1
+
+    $proc = Post-Json "/simulations/$simId/packets/process" (@{algorithm="Dijkstra"} | ConvertTo-Json)
+    Assert-Equal "matrix $count packet processed count" $proc.packets.Count 1
+    Assert-Equal "matrix $count packet status delivered" $proc.packets[0].status "delivered"
+    Assert-Equal "matrix $count packet delivered start" $proc.packets[0].route[0] 1
+    Assert-Equal "matrix $count packet delivered end" $proc.packets[0].route[-1] $count
+    Assert-Metrics "matrix $count after process" $proc.metrics 1 0 1 0 100
+
+    $history = Invoke-RestMethod "$BaseUrl/simulations/$simId/packets"
+    Assert-Equal "matrix $count packet history count" $history.count 1
+
+    $events = Invoke-RestMethod "$BaseUrl/simulations/$simId/events"
+    if ($events.events.Count -lt 3) {
+        throw "matrix $count expected at least 3 events (creation, packet created, packet processed); found $($events.events.Count)."
+    }
+    $script:Passed++
+    Write-Host "PASS matrix $count packet lifecycle verified"
+
+    $cmp = Post-Json "/simulations/$simId/compare" (@{source=1;destination=$count} | ConvertTo-Json)
+    Assert-Equal "matrix $count compare result count" $cmp.results.Count 4
+    foreach ($res in $cmp.results) {
+        Assert-Equal "matrix $count compare $($res.algorithm) reachable" $res.reachable $true
+        Assert-Equal "matrix $count compare $($res.algorithm) end" $res.route[-1] $count
+    }
+}
+
+# --- Invalid packet parameters testing ---
+$testSim = Post-Json "/simulations" '{"routerCount":8}'
+$testSimId = $testSim.id
+Assert-HttpStatus "packet count 0 rejected" { Post-Json "/simulations/$testSimId/packets" '{"source":1,"destination":8,"count":0}' } 400
+Assert-HttpStatus "packet count 101 rejected" { Post-Json "/simulations/$testSimId/packets" '{"source":1,"destination":8,"count":101}' } 400
+Assert-HttpStatus "packet priority 0 rejected" { Post-Json "/simulations/$testSimId/packets" '{"source":1,"destination":8,"priority":0}' } 400
+Assert-HttpStatus "packet priority 11 rejected" { Post-Json "/simulations/$testSimId/packets" '{"source":1,"destination":8,"priority":11}' } 400
+Assert-HttpStatus "packet unknown source router" { Post-Json "/simulations/$testSimId/packets" '{"source":999,"destination":8}' } 400
+Assert-HttpStatus "packet unknown destination router" { Post-Json "/simulations/$testSimId/packets" '{"source":1,"destination":999}' } 400
+
+# Empty packet queue processing returns empty array without error
+$emptyProcess = Post-Json "/simulations/$testSimId/packets/process" '{}'
+Assert-Equal "empty packet queue returns 0 processed" $emptyProcess.packets.Count 0
+Assert-Metrics "empty process metrics untouched" $emptyProcess.metrics 0 0 0 0 0
+
+# --- Disconnected graph and unreachable routes via link isolation ---
+$discSession = Post-Json "/simulations" '{"routerCount":4}'
+$discId = $discSession.id
+# For count 4, ring is (1-2, 2-3, 3-4, 4-1) chords (1-3, 2-4).
+# Disconnect router 4 completely by failing (3-4), (4-1), (2-4).
+Post-Json "/simulations/$discId/links/fail" '{"source":3,"destination":4}' | Out-Null
+Post-Json "/simulations/$discId/links/fail" '{"source":1,"destination":4}' | Out-Null
+Post-Json "/simulations/$discId/links/fail" '{"source":2,"destination":4}' | Out-Null
+
+Assert-HttpStatus "disconnected destination 4 route BFS" { Post-Json "/simulations/$discId/route" '{"source":1,"destination":4,"algorithm":"BFS"}' } 400
+Assert-HttpStatus "disconnected destination 4 route DFS" { Post-Json "/simulations/$discId/route" '{"source":1,"destination":4,"algorithm":"DFS"}' } 400
+Assert-HttpStatus "disconnected destination 4 route Dijkstra" { Post-Json "/simulations/$discId/route" '{"source":1,"destination":4,"algorithm":"Dijkstra"}' } 400
+Assert-HttpStatus "disconnected destination 4 route Adaptive" { Post-Json "/simulations/$discId/route" '{"source":1,"destination":4,"algorithm":"Adaptive"}' } 400
+
+$discCmp = Post-Json "/simulations/$discId/compare" '{"source":1,"destination":4}'
+Assert-Equal "disconnected compare results count" $discCmp.results.Count 4
+foreach ($res in $discCmp.results) {
+    Assert-Equal "disconnected compare $($res.algorithm) reachable" $res.reachable $false
+}
+
+# Packet queued to disconnected router must be marked lost upon processing
+$discPkt = Post-Json "/simulations/$discId/packets" '{"source":1,"destination":4,"priority":1,"count":1}'
+Assert-Equal "disconnected packet pending" $discPkt.pendingPackets 1
+$discProcessed = Post-Json "/simulations/$discId/packets/process" '{"algorithm":"Dijkstra"}'
+Assert-Equal "disconnected packet processed count" $discProcessed.packets.Count 1
+Assert-Equal "disconnected packet marked lost" $discProcessed.packets[0].status "lost"
+Assert-Equal "disconnected packet delivered is false" $discProcessed.packets[0].delivered $false
+Assert-Metrics "metrics reflect lost packet" $discProcessed.metrics 1 0 0 1 0
+
 Write-Host "All $script:Passed API assertions passed."
