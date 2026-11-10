@@ -19,7 +19,11 @@ add_executable(netroute_backend
     src/core/Network.cpp
     src/core/Packet.cpp
     src/core/Router.cpp
-    src/core/RoutingStrategy.cpp
+    src/algorithms/RoutingStrategy.cpp
+    src/algorithms/BFS.cpp
+    src/algorithms/DFS.cpp
+    src/algorithms/Dijkstra.cpp
+    src/algorithms/Adaptive.cpp
     src/services/SimulationManager.cpp
 )
 
@@ -44,7 +48,11 @@ if(BUILD_TESTING)
         src/core/Network.cpp
         src/core/Packet.cpp
         src/core/Router.cpp
-        src/core/RoutingStrategy.cpp
+        src/algorithms/RoutingStrategy.cpp
+        src/algorithms/BFS.cpp
+        src/algorithms/DFS.cpp
+        src/algorithms/Dijkstra.cpp
+        src/algorithms/Adaptive.cpp
     )
     target_include_directories(netroute_routing_tests PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/include

@@ -1,51 +1,16 @@
 #ifndef ROUTING_STRATEGY_HPP
 #define ROUTING_STRATEGY_HPP
-
 #include "Network.hpp"
-#include <vector>
+#include <map>
 #include <string>
-
-using namespace std;
-
+#include <vector>
 class RoutingStrategy {
 public:
-    virtual vector<int> findRoute(
-        const Network& network, int source, int destination) = 0;
-
-    virtual string getName() const = 0;
-    virtual ~RoutingStrategy() {}
+    virtual std::vector<int> findRoute(const Network&, int source, int destination) = 0;
+    virtual std::string getName() const = 0;
+    virtual ~RoutingStrategy() = default;
+protected:
+    static std::vector<int> buildPath(int source, int destination, const std::map<int,int>& parent);
+    static void validateEndpoints(const Network&, int source, int destination);
 };
-
-class BFSStrategy : public RoutingStrategy {
-public:
-    vector<int> findRoute(
-        const Network& network, int source, int destination) override;
-
-    string getName() const override;
-};
-
-class DFSStrategy : public RoutingStrategy {
-public:
-    vector<int> findRoute(
-        const Network& network, int source, int destination) override;
-
-    string getName() const override;
-};
-
-class DijkstraStrategy : public RoutingStrategy {
-public:
-    vector<int> findRoute(
-        const Network& network, int source, int destination) override;
-
-    string getName() const override;
-};
-
-class AdaptiveStrategy : public RoutingStrategy {
-public:
-    vector<int> findRoute(
-        const Network& network, int source, int destination) override;
-
-    string getName() const override;
-};
-
 #endif

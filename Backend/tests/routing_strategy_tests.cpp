@@ -1,5 +1,6 @@
 #include "core/Network.hpp"
-#include "core/RoutingStrategy.hpp"
+#include "algorithms/Dijkstra.hpp"
+#include "algorithms/Adaptive.hpp"
 
 #include <iostream>
 #include <sstream>

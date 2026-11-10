@@ -2,7 +2,10 @@
 #include "api/ApiServer.hpp"
 #include "core/Network.hpp"
 #include "core/Packet.hpp"
-#include "core/RoutingStrategy.hpp"
+#include "algorithms/BFS.hpp"
+#include "algorithms/DFS.hpp"
+#include "algorithms/Dijkstra.hpp"
+#include "algorithms/Adaptive.hpp"
 #include "services/SimulationManager.hpp"
 #include <algorithm>
 #include <chrono>
