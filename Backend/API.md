@@ -23,12 +23,24 @@ Simulation state is held in memory and is lost when the backend restarts. Router
 | `POST /simulations/{id}/links/fail` | Body: `{"source":1,"destination":2}`. |
 | `POST /simulations/{id}/links/repair` | Body: `{"source":1,"destination":2}`. |
 | `POST /simulations/{id}/compare` | Compare all four algorithms. Body: `{"source":1,"destination":8}`. |
-| `GET /simulations/{id}/metrics` | Packet totals, pending/delivered/lost counts, and delivery rate. |
+| `GET /simulations/{id}/metrics` | Created, pending, delivered, and lost counts, plus processed-packet delivery rate. |
 | `GET /simulations/{id}/events` | Session event log. |
 
-Topology responses contain `name`, `routerCount`, `linkCount`, `routers` (`id`, `name`, `active`) and `links` (`source`, `destination`, `cost`, `active`). Route results contain `algorithm`, router ID `route`, `cost`, `hops`, measured `executionTimeMs`, and `reachable`.
+Topology responses contain `name`, `routerCount`, `linkCount`, `routers` (`id`, `name`, `active`) and `links` (`source`, `destination`, `cost`, `active`). Route results contain `algorithm`, router ID `route`, `cost`, `hops`, measured route-search `executionTimeMs`, and `reachable`.
 
-Invalid JSON, parameters, algorithms, router counts, and unreachable routes return HTTP `400` with `{"error":"..."}`. Unknown simulation IDs return HTTP `404`. Packet history records `pending`, `delivered`, or `lost` status; processing and failure/repair actions append events.
+Metrics use the following definitions:
+
+- `totalPackets`: all packets created in the session, including pending packets.
+- `pendingPackets`: packets still in router queues.
+- `deliveredPackets`: packets successfully processed and routed.
+- `lostPackets`: packets processed when no route is available.
+- `deliveryRate`: `deliveredPackets / (deliveredPackets + lostPackets) * 100`; it is `0` before any packet is processed.
+
+Packet `priority` is validated and retained as metadata; it does not affect scheduling. Processing drains router queues in router-ID order and keeps FIFO order within each router. Packets are removed from queues when processed, so a second processing request will not process them again. Creating a packet at a known but failed source router is allowed; processing it marks it lost because an inactive endpoint cannot route. Packets to inactive or disconnected destinations are likewise marked lost when processed.
+
+For endpoints that consume a JSON body, malformed JSON, invalid fields, algorithms, router counts, and router IDs return HTTP `400` with `{"error":"..."}`. A single-route request with unreachable endpoints returns `400`. Unknown simulation IDs return HTTP `404`. Algorithm comparison returns HTTP `200` with a per-algorithm `reachable: false` result when valid router IDs have no path. Packet history records `pending`, `delivered`, or `lost` status; creation, processing, and failure/repair actions append events. Reset clears packet history, queues, counters, and events.
+
+The API serializes access to simulation state with a mutex. Separate simulation IDs have independent topology, queues, history, counters, and events.
 
 ## Adaptive strategy behavior
 

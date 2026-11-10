@@ -1,63 +1,64 @@
-# adaptive-network-routing-simulator
-NETROUTE: Adaptive Network Routing Simulator
+# NETROUTE — Adaptive Network Routing Simulator
 
-NETROUTE is an educational network-routing project with two separate implementations: a browser-based interactive network lab and a C++ command-line simulator. Both let you explore packet routes and network failures, but the browser pages do not call or depend on the C++ program.
+NETROUTE is an educational project with a browser interface, a C++ REST backend, a standalone C++ CLI simulator, and a separate data-structures module. These are distinct implementations: **the browser frontend is not yet integrated with the C++ REST API and does not currently call it.**
 
-## Features
-
-### Browser network lab
-
-- View a simulated network of 6, 7, or 8 routers.
-- Select source and destination routers and simulate a packet route.
-- Choose Breadth-First Search (BFS), Dijkstra, or Adaptive routing.
-- View the selected route, hop count, route cost, and simulation events.
-- Fail and repair routers or links, then calculate a route under the changed conditions.
-- Compare the routes reported by the three algorithms.
-- Change the visual theme and save theme/learning preferences in browser local storage.
-- Explore the learning page, packet animations, and how-to-play guide.
-
-The Modes page includes unavailable mode cards, and the navigation links to a Quiz page that is not present in this archive.
-
-### C++ command-line simulator
-
-- Starts with a predefined network of eight routers and weighted links.
-- Displays the network and sends packets between routers.
-- Calculates routes with BFS, Dijkstra, and an Adaptive strategy (Dijkstra with a BFS fallback).
-- Simulates router and link failures and repairs.
-- Checks network connectivity and compares routing results.
-- Reports packet totals, delivery/loss counts, and rates.
-- Saves and loads network state and packet history in `network_data.txt`.
-
-The `dsa/` folder contains a separate C++ data-structure module with graph, linked-list, queue, stack, and router classes, plus a small demonstration/test program. It is not the implementation used by the main command-line simulator.
-
-## Repository structure
+## Repository layout
 
 ```text
 .
-├── index.html                 # Browser app home page
-├── lab.html                   # Interactive browser network lab
-├── learn.html                 # Learning modules and algorithm walkthroughs
-├── modes.html                 # Simulation mode page
-├── how-to-play.html           # User guide
-├── settings.html              # Theme and learning settings
-├── css/                       # Page styles
-├── js/                        # Browser behavior and simulations
-├── header files/              # C++ simulator headers
-├── cpp files/                 # C++ simulator implementation and main()
-├── dsa/
-│   ├── include/               # Standalone DSA module headers
-│   ├── src/                   # Standalone DSA module implementation
-│   └── tests/                 # DSA demonstration/test program
-└── .vscode/                   # Optional VS Code C++ configuration
+├── Frontend/          # Existing browser application (HTML, CSS, JavaScript)
+├── Backend/           # C++17 REST API, core, session manager, API docs
+├── dsa/               # Separate data-structures examples and demo/tests
+├── header files/      # Headers for the standalone CLI simulator
+├── cpp files/         # Standalone CLI sources, including main.cpp
+├── README.md
+├── network_data.txt   # CLI save/load data file
+├── PPT.tex            # Project presentation source
+└── Report.tex         # Project report source
 ```
 
-## Run the browser version
+## Browser frontend
 
-No package installation or build step is required. Open `index.html` in a modern browser, or serve the repository directory with a local static web server and visit its `index.html`. The app is made from HTML, CSS, and JavaScript and has no backend service. The pages load Google Fonts from the internet; the core interface can still be opened without them.
+Open `Frontend/index.html` in a browser or serve the `Frontend/` directory with a static web server. The frontend retains its existing client-side behavior and is independent of the C++ backend. Connecting the frontend to the API is a separate future task.
 
-## Build and run the C++ version
+## C++ REST backend
 
-Install a C++17 compiler such as `g++`. From the repository root, compile the command-line simulator:
+The backend uses C++17, CMake, cpp-httplib, and nlohmann-json through the existing vcpkg installation. It creates in-memory simulation sessions, supports router counts from 4 to 20, and provides routes for routing, packets, failures/repairs, comparisons, metrics, events, and reset. **There is no MySQL integration; session state is lost when the server stops.**
+
+From the repository root in PowerShell, configure and build with the installed MSVC toolchain and vcpkg packages:
+
+```powershell
+cmake -S .\Backend -B .\Backend\build `
+  -DCMAKE_TOOLCHAIN_FILE="C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake" `
+  -DVCPKG_TARGET_TRIPLET=x64-windows
+
+cmake --build .\Backend\build --config Release
+```
+
+Start the service:
+
+```powershell
+.\Backend\build\Release\netroute_backend.exe
+```
+
+It listens on `http://127.0.0.1:8080` by default. Set `NETROUTE_PORT` before launch to select another port. Check that it is running:
+
+```powershell
+Invoke-RestMethod http://127.0.0.1:8080/api/v1/health
+```
+
+The complete endpoint contract, request examples, response fields, and Adaptive strategy description are in [`Backend/API.md`](Backend/API.md).
+
+With the backend running, verify the REST workflows and packet metric cases with PowerShell 7:
+
+```powershell
+.\Backend\tests\verify_api.ps1
+ctest --test-dir .\Backend\build -C Release --output-on-failure
+```
+
+## Standalone C++ CLI simulator
+
+The original command-line simulator remains separate from `Backend/`. From the repository root, compile it with a C++17 compiler such as `g++`:
 
 ```sh
 g++ -std=c++17 -I"header files" \
@@ -71,20 +72,16 @@ g++ -std=c++17 -I"header files" \
   -o netroute
 ```
 
-Run it from the repository root so save/load uses `network_data.txt` in that directory:
+Run it from the repository root so save/load uses `network_data.txt` there:
 
 ```sh
 ./netroute
 ```
 
-On Windows, run the generated `netroute.exe` instead. The program presents a numbered menu for its operations.
+On Windows, run `netroute.exe`. The CLI presents a numbered menu.
 
-## Technologies
+## DSA module and project assets
 
-- **Browser interface:** HTML, CSS, and vanilla JavaScript
-- **Command-line simulator:** C++17 and the standard library
-- **DSA module:** C++ source and headers
+`dsa/` contains a separate educational C++ module with graph, linked-list, queue, stack, and router code plus its demo/test program. It is not linked into either simulator. `PPT.tex` and `Report.tex` are the project presentation and report sources.
 
-## Scope and notes
-
-This is a simulation and learning project; it does not configure real routers or transmit network traffic. The browser lab and command-line simulator maintain their own simulation state. The browser project has no package manifest or automated build pipeline in the supplied repository.
+All components simulate networks locally; they do not configure real routers or transmit network traffic.
