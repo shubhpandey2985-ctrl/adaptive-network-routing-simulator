@@ -180,9 +180,9 @@
         const requiredLinks = [
             { href: "index.html", label: "Home" },
             { href: "lab.html", label: "Network Lab" },
-            { href: "modes.html", label: "Modes" },
+           
             { href: "learn.html", label: "Learn" },
-            { href: "quiz.html", label: "Quiz" },
+    
             { href: "how-to-play.html", label: "How to Play" },
             { href: "settings.html", label: "Settings" }
         ];
