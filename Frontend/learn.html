@@ -31,27 +31,27 @@
                 <a href="lab.html" class="nav-link">Network Lab</a>
                 
                 <a href="learn.html" class="nav-link active" aria-current="page">Learn</a>
-                <a href="quiz.html" class="nav-link">Quiz</a>
                 
                 <a href="how-to-play.html" class="nav-link">How to Play</a>
                 <a href="settings.html" class="nav-link">Settings</a>
 
             </nav>
 
-            <div class="top-actions">
-                <a href="how-to-play.html" class="nav-link utility-link">How to Play</a>
-                <a href="settings.html" class="nav-link utility-link" aria-label="Settings">Settings</a>
+           <div class="top-actions">
 
-                <button
-                    class="icon-btn mobile-menu-btn"
-                    id="mobileMenuBtn"
-                    aria-label="Open navigation"
-                    aria-expanded="false"
-                    type="button"
-                >
-                    ☰
-                </button>
-            </div>
+    <button
+        class="icon-btn mobile-menu-btn"
+        id="mobileMenuBtn"
+        aria-label="Open navigation"
+        aria-expanded="false"
+        type="button"
+    >
+        ☰
+    </button>
+
+</div>
+
+
         </header>
 
         <main>
@@ -439,85 +439,331 @@
                 </div>
             </section>
 
-            <!-- Module 6: Dijkstra -->
-            <section class="learn-module dark-module">
-                <div class="module-heading">
-                    <span class="module-number">06</span>
+           
+<!-- Module 6: Routing algorithms -->
+<section class="learn-module dark-module" id="routing-algorithms">
 
-                    <div>
-                        <span class="eyebrow">ALGORITHM</span>
-                        <h2>Meet Dijkstra</h2>
-                        <p>
-                            One way to understand minimum-cost routing is to follow Dijkstra's shortest-path process.
-                        </p>
-                    </div>
+    <div class="module-heading">
+        <span class="module-number">06</span>
+
+        <div>
+            <span class="eyebrow">ROUTING ALGORITHMS</span>
+            <h2>Meet the Algorithms</h2>
+            <p>
+                Four approaches to finding and selecting routes through a network.
+                Choose an algorithm and follow its decisions step by step.
+            </p>
+        </div>
+    </div>
+
+    <style>
+        .algorithm-tabs {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 22px;
+        }
+
+        .algorithm-tab {
+            padding: 15px 12px;
+            border: 1px solid var(--learn-line, rgba(255,255,255,.12));
+            border-radius: 12px;
+            background: rgba(255,255,255,.025);
+            color: inherit;
+            text-align: left;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .algorithm-tab:hover,
+        .algorithm-tab.active {
+            border-color: var(--learn-cyan, #00e5ff);
+            background: rgba(0,229,255,.09);
+        }
+
+        .algorithm-tab strong {
+            display: block;
+            margin-bottom: 5px;
+            font-family: Orbitron, sans-serif;
+            font-size: 13px;
+        }
+
+        .algorithm-tab span {
+            display: block;
+            font-size: 11px;
+            opacity: .7;
+        }
+
+        .algorithm-description {
+            margin-bottom: 18px;
+            padding: 17px 19px;
+            border-left: 3px solid var(--learn-cyan, #00e5ff);
+            border-radius: 8px;
+            background: rgba(0,229,255,.055);
+        }
+
+        .algorithm-description h3 {
+            margin: 0 0 7px;
+        }
+
+        .algorithm-description p {
+            margin: 0;
+            line-height: 1.7;
+        }
+
+        .algorithm-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .algorithm-step {
+            display: flex;
+            gap: 13px;
+            padding: 13px;
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 9px;
+            opacity: .48;
+            transition: .2s ease;
+        }
+
+        .algorithm-step.active {
+            opacity: 1;
+            border-color: var(--learn-cyan, #00e5ff);
+            background: rgba(0,229,255,.06);
+        }
+
+        .algorithm-step > span {
+            color: var(--learn-cyan, #00e5ff);
+            font-family: Orbitron, sans-serif;
+            font-size: 12px;
+            min-width: 25px;
+        }
+
+        .algorithm-step strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .algorithm-step p {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.6;
+            opacity: .75;
+        }
+
+        .algorithm-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .algorithm-step-count {
+            margin-left: auto;
+            font-size: 12px;
+            opacity: .7;
+        }
+
+        .algorithm-network svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .algorithm-network .d-edge {
+            stroke: #34445d;
+            stroke-width: 3;
+            fill: none;
+            transition: .25s ease;
+        }
+
+        .algorithm-network .d-edge.active {
+            stroke: #00e5ff;
+            stroke-width: 5;
+            filter: drop-shadow(0 0 6px #00e5ff);
+        }
+
+        .algorithm-network .d-edge.failed {
+            stroke: #ff5470;
+            stroke-dasharray: 8 7;
+            opacity: .4;
+        }
+
+        .algorithm-network .d-node {
+            fill: #101827;
+            stroke: #60718b;
+            stroke-width: 3;
+            transition: .25s ease;
+        }
+
+        .algorithm-network .d-node.active {
+            fill: rgba(0,229,255,.2);
+            stroke: #00e5ff;
+            filter: drop-shadow(0 0 8px #00e5ff);
+        }
+
+        .algorithm-network .d-node.failed {
+            fill: rgba(255,84,112,.15);
+            stroke: #ff5470;
+            opacity: .65;
+        }
+
+        .algorithm-network text {
+            fill: #91a6c4;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 17px;
+            text-anchor: middle;
+        }
+
+        .algorithm-network .weight-label {
+            fill: #f4c96b;
+            font-size: 14px;
+        }
+
+        @media (max-width: 700px) {
+            .algorithm-tabs {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .algorithm-controls {
+                align-items: stretch;
+            }
+
+            .algorithm-controls .btn {
+                flex: 1;
+            }
+        }
+    </style>
+
+    <div class="algorithm-tabs" role="group" aria-label="Choose routing algorithm">
+
+        <button class="algorithm-tab active" type="button" data-algorithm="bfs">
+            <strong>BFS</strong>
+            <span>Level by level</span>
+        </button>
+
+        <button class="algorithm-tab" type="button" data-algorithm="dfs">
+            <strong>DFS</strong>
+            <span>Deep exploration</span>
+        </button>
+
+        <button class="algorithm-tab" type="button" data-algorithm="dijkstra">
+            <strong>DIJKSTRA</strong>
+            <span>Minimum cost</span>
+        </button>
+
+        <button class="algorithm-tab" type="button" data-algorithm="adaptive">
+            <strong>ADAPTIVE</strong>
+            <span>Dynamic routing</span>
+        </button>
+
+    </div>
+
+    <div class="algorithm-description">
+        <h3 id="algorithmTitle">Breadth-First Search</h3>
+        <p id="algorithmDescription">
+            BFS explores neighbouring routers level by level.
+            It finds a path with the fewest hops in an unweighted graph.
+        </p>
+    </div>
+
+    <div class="dijkstra-lab">
+
+        <div class="algorithm-network">
+            <svg id="algorithmNetworkSvg" viewBox="0 0 800 390"
+                 role="img" aria-label="Six-router network used to demonstrate routing algorithms">
+
+                <!-- Network links -->
+                <line class="d-edge" data-edge-index="0"
+                      x1="100" y1="195" x2="280" y2="90"/>
+
+                <line class="d-edge" data-edge-index="1"
+                      x1="100" y1="195" x2="280" y2="300"/>
+
+                <line class="d-edge" data-edge-index="2"
+                      x1="280" y1="90" x2="500" y2="145"/>
+
+                <line class="d-edge" data-edge-index="3"
+                      x1="280" y1="300" x2="500" y2="245"/>
+
+                <line class="d-edge" data-edge-index="4"
+                      x1="500" y1="145" x2="700" y2="195"/>
+
+                <line class="d-edge" data-edge-index="5"
+                      x1="500" y1="245" x2="700" y2="195"/>
+
+                <!-- Link costs -->
+                <text class="weight-label" x="180" y="125">2</text>
+                <text class="weight-label" x="180" y="275">3</text>
+                <text class="weight-label" x="390" y="100">2</text>
+                <text class="weight-label" x="390" y="285">1</text>
+                <text class="weight-label" x="610" y="145">1</text>
+                <text class="weight-label" x="610" y="260">1</text>
+
+                <!-- Routers -->
+                <circle class="d-node active" data-router="0"
+                        cx="100" cy="195" r="20"/>
+
+                <circle class="d-node" data-router="1"
+                        cx="280" cy="90" r="20"/>
+
+                <circle class="d-node" data-router="2"
+                        cx="280" cy="300" r="20"/>
+
+                <circle class="d-node" data-router="3"
+                        cx="500" cy="145" r="20"/>
+
+                <circle class="d-node" data-router="4"
+                        cx="500" cy="245" r="20"/>
+
+                <circle class="d-node" data-router="5"
+                        cx="700" cy="195" r="22"/>
+
+                <!-- Router labels -->
+                <text x="100" y="240">R1</text>
+                <text x="280" y="55">R2</text>
+                <text x="280" y="345">R3</text>
+                <text x="500" y="110">R4</text>
+                <text x="500" y="290">R5</text>
+                <text x="700" y="240">R6</text>
+
+            </svg>
+        </div>
+
+        <div class="algorithm-steps" id="algorithmSteps" aria-live="polite">
+
+            <div class="algorithm-step active">
+                <span>01</span>
+                <div>
+                    <strong>Start at the source</strong>
+                    <p>Begin at R1.</p>
                 </div>
+            </div>
 
-                <div class="dijkstra-lab">
-                    <div class="dijkstra-network">
-                        <svg viewBox="0 0 800 390">
-                            <line class="d-edge" x1="100" y1="195" x2="280" y2="90"/>
-                            <line class="d-edge" x1="100" y1="195" x2="280" y2="300"/>
-                            <line class="d-edge" x1="280" y1="90" x2="500" y2="145"/>
-                            <line class="d-edge" x1="280" y1="300" x2="500" y2="245"/>
-                            <line class="d-edge" x1="500" y1="145" x2="700" y2="195"/>
-                            <line class="d-edge" x1="500" y1="245" x2="700" y2="195"/>
+        </div>
 
-                            <circle class="d-node start" cx="100" cy="195" r="20"/>
-                            <circle class="d-node" cx="280" cy="90" r="20"/>
-                            <circle class="d-node" cx="280" cy="300" r="20"/>
-                            <circle class="d-node" cx="500" cy="145" r="20"/>
-                            <circle class="d-node" cx="500" cy="245" r="20"/>
-                            <circle class="d-node destination-node" cx="700" cy="195" r="22"/>
+        <div class="algorithm-controls">
 
-                            <text x="82" y="240">R1</text>
-                            <text x="262" y="55">R2</text>
-                            <text x="262" y="345">R3</text>
-                            <text x="482" y="110">R4</text>
-                            <text x="482" y="290">R5</text>
-                            <text x="680" y="240">R6</text>
-                        </svg>
-                    </div>
+            <button class="btn btn-primary" id="nextAlgorithmStep" type="button">
+                NEXT STEP →
+            </button>
 
-                    <div class="algorithm-steps">
-                        <div class="algorithm-step active" data-step="0">
-                            <span>01</span>
-                            <div>
-                                <strong>Start at the source</strong>
-                                <p>Begin with R1 and assign it a distance of 0.</p>
-                            </div>
-                        </div>
+            <button class="btn btn-secondary" id="resetAlgorithm" type="button">
+                RESTART ↻
+            </button>
 
-                        <div class="algorithm-step" data-step="1">
-                            <span>02</span>
-                            <div>
-                                <strong>Check neighbouring routers</strong>
-                                <p>Look at the available links and their costs.</p>
-                            </div>
-                        </div>
+            <span class="algorithm-step-count" id="algorithmStepCount">
+                STEP 1 / 4
+            </span>
 
-                        <div class="algorithm-step" data-step="2">
-                            <span>03</span>
-                            <div>
-                                <strong>Choose the lowest known cost</strong>
-                                <p>Select the next router with the smallest tentative distance.</p>
-                            </div>
-                        </div>
+        </div>
 
-                        <div class="algorithm-step" data-step="3">
-                            <span>04</span>
-                            <div>
-                                <strong>Repeat</strong>
-                                <p>Continue until the destination's shortest distance is determined.</p>
-                            </div>
-                        </div>
+    </div>
 
-                        <button class="btn btn-primary" id="nextDijkstra" type="button">
-                            NEXT STEP →
-                        </button>
-                    </div>
-                </div>
-            </section>
+</section>
+
 
             <!-- Module 7: Recovery -->
             <section class="learn-module">

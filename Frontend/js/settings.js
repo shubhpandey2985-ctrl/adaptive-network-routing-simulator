@@ -1,9 +1,11 @@
+
 /* NETROUTE — Settings page */
 
 (() => {
     "use strict";
 
     document.addEventListener("DOMContentLoaded", () => {
+
         const settings = window.NETROUTE_SETTINGS;
 
         if (!settings) {
@@ -19,18 +21,6 @@
 
         const currentThemeLabel = document.getElementById(
             "currentThemeLabel"
-        );
-
-        const learningMode = document.getElementById(
-            "learningMode"
-        );
-
-        const animationMode = document.getElementById(
-            "animationMode"
-        );
-
-        const soundMode = document.getElementById(
-            "soundMode"
         );
 
         const resetButton = document.getElementById(
@@ -50,7 +40,7 @@
             "midnight-purple": "MIDNIGHT PURPLE"
         };
 
-        /* Show an inline feedback message */
+        /* Show inline feedback */
         function showFeedback(message) {
             if (!feedback) return;
 
@@ -67,22 +57,21 @@
             }, 3000);
         }
 
-        /* Update the selected theme card and label */
+        /* Update selected theme card and label */
         function updateThemeCards(selectedTheme) {
-            const validTheme = settings.themes.includes(
-                selectedTheme
-            )
+
+            const validTheme = settings.themes.includes(selectedTheme)
                 ? selectedTheme
                 : "dark-neon";
 
             themeCards.forEach((card) => {
+
                 const isSelected =
                     card.dataset.themeChoice === validTheme;
 
                 card.classList.toggle("active", isSelected);
                 card.classList.toggle("selected", isSelected);
 
-                /* Correct state for radio buttons */
                 card.setAttribute(
                     "aria-checked",
                     String(isSelected)
@@ -92,43 +81,26 @@
                     "aria-pressed",
                     String(isSelected)
                 );
+
             });
 
-            /* Update the visible current-theme label */
             if (currentThemeLabel) {
                 currentThemeLabel.textContent =
                     themeNames[validTheme];
             }
         }
 
-        /* Load all saved settings */
+        /* Load currently saved theme */
         function loadSettings() {
             const preferences = settings.getPreferences();
-
             updateThemeCards(preferences.theme);
-
-            if (learningMode) {
-                learningMode.value =
-                    preferences.learningMode;
-            }
-
-            if (animationMode) {
-                animationMode.value =
-                    preferences.animations;
-            }
-
-            if (soundMode) {
-                soundMode.value =
-                    preferences.sound;
-            }
-
-            document.documentElement.dataset.animations =
-                preferences.animations;
         }
 
         /* Theme selection */
         themeCards.forEach((card) => {
+
             card.addEventListener("click", () => {
+
                 const selectedTheme =
                     card.dataset.themeChoice;
 
@@ -143,72 +115,45 @@
                 showFeedback(
                     `${themeNames[selectedTheme]} theme applied.`
                 );
+
             });
+
         });
 
-        /* Learning mode */
-        if (learningMode) {
-            learningMode.addEventListener("change", () => {
-                settings.savePreference(
-                    "learningMode",
-                    learningMode.value
-                );
-
-                showFeedback("Learning mode saved.");
-            });
-        }
-
-        /* Animation preference */
-        if (animationMode) {
-            animationMode.addEventListener("change", () => {
-                settings.savePreference(
-                    "animations",
-                    animationMode.value
-                );
-
-                showFeedback("Animation preference saved.");
-            });
-        }
-
-        /* Sound preference */
-        if (soundMode) {
-            soundMode.addEventListener("change", () => {
-                settings.savePreference(
-                    "sound",
-                    soundMode.value
-                );
-
-                showFeedback("Sound preference saved.");
-            });
-        }
-
-        /* Reset all settings */
+        /* Reset theme to default */
         if (resetButton) {
+
             resetButton.addEventListener("click", (event) => {
+
                 event.preventDefault();
 
-                settings.resetSettings();
+                settings.applyTheme("dark-neon");
 
                 loadSettings();
 
                 showFeedback(
-                    "Settings restored to defaults."
+                    "Theme restored to Dark Neon."
                 );
+
             });
+
         }
 
-        /* Keep the settings page synchronized with theme
-           changes made elsewhere in NETROUTE */
+        /* Keep theme cards synchronized with changes elsewhere */
         document.addEventListener(
             "netroute:themechange",
             (event) => {
+
                 if (event.detail && event.detail.theme) {
                     updateThemeCards(event.detail.theme);
                 }
+
             }
         );
 
-        /* Initialize page with saved preferences */
+        /* Initialize */
         loadSettings();
+
     });
+
 })();

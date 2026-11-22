@@ -656,136 +656,338 @@ if (resetFailure) {
 startRouteLoop();
 
 
-/* Module 6: Dijkstra steps */
 
-const algorithmSteps =
-    document.querySelectorAll(
-        ".algorithm-step"
-    );
+/* Module 6: Interactive routing algorithms */
 
-const nextDijkstra =
-    document.getElementById(
-        "nextDijkstra"
-    );
+const algorithmTabs = document.querySelectorAll("[data-algorithm]");
 
-const dNodes =
-    document.querySelectorAll(
-        ".d-node"
-    );
+const algorithmTitle = document.getElementById("algorithmTitle");
+const algorithmDescription = document.getElementById("algorithmDescription");
 
-const dEdges =
-    document.querySelectorAll(
-        ".d-edge"
-    );
+const algorithmStepsContainer = document.getElementById("algorithmSteps");
 
-let algorithmStep = 0;
+const nextAlgorithmStep = document.getElementById("nextAlgorithmStep");
+const resetAlgorithm = document.getElementById("resetAlgorithm");
+const algorithmStepCount = document.getElementById("algorithmStepCount");
+
+const algorithmNodes = document.querySelectorAll(".algorithm-network .d-node");
+const algorithmEdges = document.querySelectorAll(".algorithm-network .d-edge");
+
+const routingAlgorithms = {
+
+    bfs: {
+        title: "Breadth-First Search",
+        description:
+            "BFS explores neighbouring routers level by level. It finds a path with the fewest hops in an unweighted graph.",
+
+        steps: [
+            {
+                title: "Start at R1",
+                description:
+                    "Put the source router R1 into the queue. Mark it as visited.",
+                nodes: [0],
+                edges: []
+            },
+            {
+                title: "Explore the first level",
+                description:
+                    "Visit R1's neighbours R2 and R3. Both are one hop away from R1.",
+                nodes: [0, 1, 2],
+                edges: [0, 1]
+            },
+            {
+                title: "Explore the second level",
+                description:
+                    "Continue with the next routers in the queue. R4 and R5 are discovered.",
+                nodes: [0, 1, 2, 3, 4],
+                edges: [0, 1, 2, 3]
+            },
+            {
+                title: "Reach the destination",
+                description:
+                    "R6 is reached from the next level. BFS has found a route with three hops.",
+                nodes: [0, 1, 2, 3, 4, 5],
+                edges: [0, 1, 2, 3, 4, 5]
+            }
+        ]
+    },
+
+    dfs: {
+        title: "Depth-First Search",
+        description:
+            "DFS follows one available path as deeply as possible before backtracking. It uses a stack or recursion to manage exploration.",
+
+        steps: [
+            {
+                title: "Start at R1",
+                description:
+                    "Mark R1 as visited. Choose an unvisited neighbour to continue.",
+                nodes: [0],
+                edges: []
+            },
+            {
+                title: "Go deeper to R2",
+                description:
+                    "Follow the upper branch from R1 to R2. DFS continues down this branch.",
+                nodes: [0, 1],
+                edges: [0]
+            },
+            {
+                title: "Continue to R4",
+                description:
+                    "Move from R2 to R4. DFS explores this branch before returning to other choices.",
+                nodes: [0, 1, 3],
+                edges: [0, 2]
+            },
+            {
+                title: "Reach R6",
+                description:
+                    "R4 connects to R6, so the destination is reached. DFS does not guarantee the shortest path.",
+                nodes: [0, 1, 3, 5],
+                edges: [0, 2, 4]
+            }
+        ]
+    },
+
+    dijkstra: {
+        title: "Dijkstra's Shortest-Path Algorithm",
+        description:
+            "Dijkstra uses weighted links and repeatedly selects the unvisited router with the smallest known distance.",
+
+        steps: [
+            {
+                title: "Initialize distances",
+                description:
+                    "Set the distance to R1 as 0. Set all other router distances to infinity.",
+                nodes: [0],
+                edges: []
+            },
+            {
+                title: "Calculate neighbouring costs",
+                description:
+                    "From R1, R2 has cost 2 and R3 has cost 3. These become the current tentative distances.",
+                nodes: [0, 1, 2],
+                edges: [0, 1]
+            },
+            {
+                title: "Choose the lowest distance",
+                description:
+                    "R2 has the smaller tentative distance. From R2, R4 gets a total cost of 4.",
+                nodes: [0, 1, 2, 3],
+                edges: [0, 1, 2]
+            },
+            {
+                title: "Determine the destination cost",
+                description:
+                    "The upper route R1 → R2 → R4 → R6 costs 5. The lower route also costs 5 in this example.",
+                nodes: [0, 1, 2, 3, 4, 5],
+                edges: [0, 1, 2, 3, 4, 5]
+            }
+        ]
+    },
+
+    adaptive: {
+        title: "Adaptive Routing",
+        description:
+            "Adaptive routing responds to changing network conditions. If a router or link becomes unavailable, an alternate route can be selected.",
+
+        steps: [
+            {
+                title: "Start with a healthy network",
+                description:
+                    "R1 can reach R6 through the upper route R1 → R2 → R4 → R6.",
+                nodes: [0, 1, 3, 5],
+                edges: [0, 2, 4]
+            },
+            {
+                title: "R2 becomes unavailable",
+                description:
+                    "The router R2 fails. The upper route can no longer be used.",
+                nodes: [0, 1, 3, 5],
+                edges: [0, 2, 4],
+                failedNodes: [1],
+                failedEdges: [0, 2]
+            },
+            {
+                title: "Find another available route",
+                description:
+                    "The network can use the lower branch through R3 and R5 instead of the failed router.",
+                nodes: [0, 2, 4, 5],
+                edges: [1, 3, 5],
+                failedNodes: [1],
+                failedEdges: [0, 2]
+            },
+            {
+                title: "Communication is restored",
+                description:
+                    "The alternate route R1 → R3 → R5 → R6 is available. Traffic can reach the destination without using R2.",
+                nodes: [0, 2, 4, 5],
+                edges: [1, 3, 5],
+                failedNodes: [1],
+                failedEdges: [0, 2]
+            }
+        ]
+    }
+
+};
+
+let selectedAlgorithm = "bfs";
+let currentAlgorithmStep = 0;
 
 function renderAlgorithmStep() {
-    algorithmSteps.forEach(
-        (step, index) => {
-            step.classList.toggle(
-                "active",
-                index === algorithmStep
-            );
-        }
-    );
 
-    dNodes.forEach(node => {
-        node.classList.remove(
-            "active"
-        );
+    const algorithm = routingAlgorithms[selectedAlgorithm];
+
+    if (!algorithm) return;
+
+    const step = algorithm.steps[currentAlgorithmStep];
+
+    if (!step) return;
+
+    /* Update step descriptions */
+    algorithmStepsContainer.innerHTML = "";
+
+    algorithm.steps.forEach((item, index) => {
+
+        const stepElement = document.createElement("div");
+
+        stepElement.className =
+            "algorithm-step" +
+            (index === currentAlgorithmStep ? " active" : "");
+
+        const number = document.createElement("span");
+        number.textContent = String(index + 1).padStart(2, "0");
+
+        const content = document.createElement("div");
+
+        const heading = document.createElement("strong");
+        heading.textContent = item.title;
+
+        const description = document.createElement("p");
+        description.textContent = item.description;
+
+        content.appendChild(heading);
+        content.appendChild(description);
+
+        stepElement.appendChild(number);
+        stepElement.appendChild(content);
+
+        algorithmStepsContainer.appendChild(stepElement);
+
     });
 
-    dEdges.forEach(edge => {
-        edge.classList.remove(
-            "active"
-        );
+    /* Reset all router states */
+    algorithmNodes.forEach(node => {
+        node.classList.remove("active", "failed");
     });
 
-    if (algorithmStep === 0) {
-        dNodes[0]?.classList.add(
-            "active"
-        );
-    }
+    /* Reset all link states */
+    algorithmEdges.forEach(edge => {
+        edge.classList.remove("active", "failed");
+    });
 
-    if (algorithmStep === 1) {
-        dNodes[0]?.classList.add(
-            "active"
-        );
+    /* Highlight active routers */
+    (step.nodes || []).forEach(index => {
+        algorithmNodes[index]?.classList.add("active");
+    });
 
-        dNodes[1]?.classList.add(
-            "active"
-        );
+    /* Highlight active links */
+    (step.edges || []).forEach(index => {
+        algorithmEdges[index]?.classList.add("active");
+    });
 
-        dNodes[2]?.classList.add(
-            "active"
-        );
+    /* Show unavailable routers */
+    (step.failedNodes || []).forEach(index => {
+        algorithmNodes[index]?.classList.remove("active");
+        algorithmNodes[index]?.classList.add("failed");
+    });
 
-        dEdges[0]?.classList.add(
-            "active"
-        );
+    /* Show unavailable links */
+    (step.failedEdges || []).forEach(index => {
+        algorithmEdges[index]?.classList.remove("active");
+        algorithmEdges[index]?.classList.add("failed");
+    });
 
-        dEdges[1]?.classList.add(
-            "active"
-        );
-    }
+    /* Update step counter */
+    algorithmStepCount.textContent =
+        `STEP ${currentAlgorithmStep + 1} / ${algorithm.steps.length}`;
 
-    if (algorithmStep === 2) {
-        dNodes[0]?.classList.add(
-            "active"
-        );
+    /* Update next button */
+    nextAlgorithmStep.textContent =
+        currentAlgorithmStep === algorithm.steps.length - 1
+            ? "RESTART STEPS ↻"
+            : "NEXT STEP →";
 
-        dNodes[1]?.classList.add(
-            "active"
-        );
-
-        dEdges[0]?.classList.add(
-            "active"
-        );
-    }
-
-    if (algorithmStep === 3) {
-        dNodes.forEach(node => {
-            node.classList.add(
-                "active"
-            );
-        });
-
-        dEdges.forEach(edge => {
-            edge.classList.add(
-                "active"
-            );
-        });
-    }
-
-    if (nextDijkstra) {
-        nextDijkstra.textContent =
-            algorithmStep ===
-            algorithmSteps.length - 1
-                ? "RESTART STEPS ↻"
-                : "NEXT STEP →";
-    }
 }
 
-if (nextDijkstra) {
-    nextDijkstra.addEventListener(
-        "click",
-        () => {
-            algorithmStep++;
+function selectAlgorithm(name) {
 
-            if (
-                algorithmStep >=
-                algorithmSteps.length
-            ) {
-                algorithmStep = 0;
-            }
+    if (!routingAlgorithms[name]) return;
 
-            renderAlgorithmStep();
+    selectedAlgorithm = name;
+    currentAlgorithmStep = 0;
+
+    const algorithm = routingAlgorithms[name];
+
+    algorithmTabs.forEach(tab => {
+
+        const isSelected = tab.dataset.algorithm === name;
+
+        tab.classList.toggle("active", isSelected);
+        tab.setAttribute("aria-pressed", String(isSelected));
+
+    });
+
+    algorithmTitle.textContent = algorithm.title;
+    algorithmDescription.textContent = algorithm.description;
+
+    renderAlgorithmStep();
+
+}
+
+/* Algorithm selection */
+algorithmTabs.forEach(tab => {
+
+    tab.addEventListener("click", () => {
+        selectAlgorithm(tab.dataset.algorithm);
+    });
+
+});
+
+/* Next step */
+if (nextAlgorithmStep) {
+
+    nextAlgorithmStep.addEventListener("click", () => {
+
+        const algorithm = routingAlgorithms[selectedAlgorithm];
+
+        currentAlgorithmStep++;
+
+        if (currentAlgorithmStep >= algorithm.steps.length) {
+            currentAlgorithmStep = 0;
         }
-    );
+
+        renderAlgorithmStep();
+
+    });
+
 }
 
-renderAlgorithmStep();
+/* Restart selected algorithm */
+if (resetAlgorithm) {
+
+    resetAlgorithm.addEventListener("click", () => {
+
+        currentAlgorithmStep = 0;
+        renderAlgorithmStep();
+
+    });
+
+}
+
+/* Initial state */
+selectAlgorithm("bfs");
+
 
 
 /* Reveal animations */
