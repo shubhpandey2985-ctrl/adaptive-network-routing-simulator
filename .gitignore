@@ -2,7 +2,7 @@
 .gitkeep
 
 # CMake and compiler outputs
-/Backend/build/
+# /Backend/build/
 /simulator.exe
 **/build/
 cmake-build*/
