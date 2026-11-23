@@ -23,6 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
         destinationSelect: $("destinationSelect"),
         prioritySelect: $("prioritySelect"),
         packetCount: $("packetCount"),
+        packetQueueList: $("packetQueueList"),
+queueCount: $("queueCount"),
 
         failureRouterSelect: $("failureRouterSelect"),
         failureLinkSelect: $("failureLinkSelect"),
@@ -89,6 +91,16 @@ document.addEventListener("DOMContentLoaded", () => {
         high: 5,
         critical: 10
     });
+
+    const PRIORITY_DETAILS = Object.freeze({
+    1: { name: "Normal", color: "#94a3b8", radius: 5 },
+    5: { name: "High", color: "#f59e0b", radius: 7 },
+    10: { name: "Critical", color: "#f43f5e", radius: 9 }
+});
+
+function getPriorityDetails(value) {
+    return PRIORITY_DETAILS[Number(value)] || PRIORITY_DETAILS[1];
+}
 
     const state = {
         simulationId: null,
@@ -1323,24 +1335,44 @@ function animatePacketRoute(packet, packetIndex = 0) {
             }
         }
 
-        const marker = svg("circle", {
-            cx: routeRouters[0].x,
-            cy: routeRouters[0].y,
-            r: 6,
-            class: "packet-dot moving-packet"
-        });
+        // Get colour and size from THIS packet's priority.
+      const queuedPacket = state.pendingPackets.find(
+    p => String(p.id) === String(packet.id)
+);
+
+const packetPriority =
+    packet.priority ?? queuedPacket?.priority ?? 1;
+
+const priority = getPriorityDetails(packetPriority);
+
+const marker = svg("circle", {
+    cx: routeRouters[0].x,
+    cy: routeRouters[0].y,
+    r: priority.radius,
+    stroke: "#ffffff",
+    "stroke-width": 1.5,
+    class: `moving-packet priority-${priority.name.toLowerCase()}`
+});
+
+// Force priority colour, overriding existing CSS.
+marker.style.setProperty("fill", priority.color, "important");
+marker.style.setProperty("stroke", "#ffffff", "important");
+marker.style.setProperty("filter", `drop-shadow(0 0 7px ${priority.color})`);
 
         const title = svg(
             "title",
             {},
-            `Packet ${packet.id}`
+            `Packet ${packet.id} · ${priority.name} Priority`
         );
 
         marker.appendChild(title);
         el.packetsLayer.appendChild(marker);
 
-        const hopDuration = 450;
-        const startDelay = packetIndex * 130;
+        // Slower animation: 1.8 seconds per hop.
+        const hopDuration = 1000;
+
+        // Small delay between packets to avoid overlap.
+        const startDelay = packetIndex * 250;
 
         const wait = (ms) =>
             new Promise((done) => setTimeout(done, ms));
@@ -1350,6 +1382,7 @@ function animatePacketRoute(packet, packetIndex = 0) {
                 const start = performance.now();
 
                 function frame(now) {
+                    // Recheck link availability during movement.
                     const link = getLink(
                         from.name,
                         to.name
@@ -1366,6 +1399,7 @@ function animatePacketRoute(packet, packetIndex = 0) {
                         1
                     );
 
+                    // Smooth movement.
                     const eased =
                         progress * progress * (3 - 2 * progress);
 
@@ -1416,7 +1450,6 @@ function animatePacketRoute(packet, packetIndex = 0) {
     });
 }
 
-
     async function refreshPackets() {
         const [history, pending] = await Promise.all([
             request(simulationPath("/packets")),
@@ -1435,42 +1468,113 @@ function animatePacketRoute(packet, packetIndex = 0) {
         updatePacketControls();
     }
 
-    function renderPackets() {
-        if (!el.packetsLayer) return;
+   function renderPackets() {
+    if (!el.packetsLayer) return;
 
-        el.packetsLayer.replaceChildren();
+    el.packetsLayer.replaceChildren();
 
-        state.pendingPackets.forEach((packet) => {
-            const source = state.routers.find(
-                (router) => router.backendId === Number(packet.source)
-            );
+    state.pendingPackets.forEach((packet) => {
+        const source = state.routers.find(
+            router => router.backendId === Number(packet.source)
+        );
 
-            if (!source) return;
+        if (!source) return;
 
-            const group = svg("g", {
-                class: "packet-node",
-                transform: `translate(${source.x},${source.y - 45})`
-            });
+        const priority = getPriorityDetails(packet.priority);
 
-            group.appendChild(svg("circle", {
-                cx: 0,
-                cy: 0,
-                r: 7,
-                class: "packet-dot"
-            }));
-
-            const title = svg(
-                "title",
-                {},
-                `Packet ${packet.id} · Priority ${packet.priority}`
-            );
-
-            group.appendChild(title);
-            el.packetsLayer.appendChild(group);
+        const group = svg("g", {
+            class: `packet-node packet-${priority.name.toLowerCase()}`,
+            transform: `translate(${source.x},${source.y - 45})`
         });
+
+        group.appendChild(svg("circle", {
+            cx: 0,
+            cy: 0,
+            r: priority.radius,
+            fill: priority.color,
+            stroke: "#ffffff",
+            "stroke-width": 1.5,
+            style: `fill:${priority.color};stroke:#ffffff;stroke-width:1.5px`
+        }));
+
+        group.appendChild(svg("text", {
+            x: 0,
+            y: -13,
+            "text-anchor": "middle",
+            fill: priority.color,
+            style: `fill:${priority.color};font-size:10px;font-weight:800`
+        }, priority.name.toUpperCase()));
+
+        group.appendChild(svg(
+            "title",
+            {},
+            `Packet ${packet.id} · ${priority.name} Priority`
+        ));
+
+        el.packetsLayer.appendChild(group);
+    });
+
+    renderPacketQueue();
+}
+
+function renderPacketQueue() {
+    if (!el.packetQueueList) return;
+
+    el.packetQueueList.replaceChildren();
+
+    const pending = [...state.pendingPackets].sort((a, b) => {
+        const difference = Number(b.priority) - Number(a.priority);
+        return difference || Number(a.id) - Number(b.id);
+    });
+
+    if (el.queueCount) {
+        el.queueCount.textContent = String(pending.length);
     }
 
+    if (pending.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "queue-empty";
+        empty.textContent = "No packets waiting in the queue.";
+        el.packetQueueList.appendChild(empty);
+        return;
+    }
 
+    pending.forEach(packet => {
+        const priority = getPriorityDetails(packet.priority);
+
+        const item = document.createElement("div");
+        item.className =
+            `queue-packet queue-${priority.name.toLowerCase()}`;
+
+        const packetLabel = document.createElement("span");
+        packetLabel.className = "queue-packet-name";
+        packetLabel.textContent = `Packet #${packet.id}`;
+
+        const routeLabel = document.createElement("span");
+        routeLabel.className = "queue-packet-route";
+
+        const source = state.routers.find(
+            r => r.backendId === Number(packet.source)
+        );
+
+        const destination = state.routers.find(
+            r => r.backendId === Number(packet.destination)
+        );
+
+        routeLabel.textContent =
+            `${source?.name || packet.source} → ${destination?.name || packet.destination}`;
+
+        const badge = document.createElement("span");
+        badge.className = "queue-packet-priority";
+        badge.textContent = priority.name.toUpperCase();
+        badge.style.color = priority.color;
+        badge.style.borderColor = priority.color;
+        badge.style.backgroundColor = `${priority.color}18`;
+
+        item.append(packetLabel, routeLabel, badge);
+        el.packetQueueList.appendChild(item);
+    });
+}
     // --------------------------------------------------
     // ROUTER FAILURE AND RECOVERY
     // --------------------------------------------------
@@ -1857,13 +1961,9 @@ function animatePacketRoute(packet, packetIndex = 0) {
     // START SIMULATION
     // --------------------------------------------------
 
-    async function startSimulation() {
-        await queuePackets();
-
-        if (state.pendingPackets.length > 0) {
-            await processPendingPackets();
-        }
-    }
+   async function startSimulation() {
+    await queuePackets();
+}
 
 
     // --------------------------------------------------

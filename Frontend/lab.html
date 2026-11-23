@@ -353,7 +353,7 @@
                 class="btn btn-primary btn-full"
                 type="button">
 
-                ▶ Start Simulation
+                ＋ Add Packet(s) to Queue
 
             </button>
 
@@ -366,6 +366,27 @@
                 ▶ Process Pending Packets
 
             </button>
+
+            <section class="packet-queue-panel" aria-live="polite">
+    <div class="packet-queue-heading">
+        <strong>Pending Packet Queue</strong>
+        <span id="queueCount" class="queue-count">0</span>
+    </div>
+
+    <div class="packet-priority-legend">
+        <span><i style="background:#94a3b8"></i> Normal</span>
+        <span><i style="background:#f59e0b"></i> High</span>
+        <span><i style="background:#f43f5e"></i> Critical</span>
+    </div>
+
+    <div id="packetQueueList" class="packet-queue-list">
+        <p class="queue-empty">No packets waiting in the queue.</p>
+    </div>
+
+    <p class="field-hint">
+        Processing priority: Critical → High → Normal.
+    </p>
+</section>
 
 
             <div class="panel-divider"></div>
